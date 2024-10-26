@@ -50,6 +50,6 @@ pip install -U scikit-learn
 # End of Project Checklist
 - [ ] Does it work?
 - [ ] Write report
-- [ ] ReadMe Dependencies
+- [ ] Update readme.md Dependencies section
     - [ ] requirement.txt
     - [ ] manually install code block
