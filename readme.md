@@ -33,8 +33,7 @@ install python libraries:
 ```
 pip install matplotlib
 pip install networkx
-pip numpy
-pip scipy
+pip install numpy
 pip install -U scikit-learn
 ```
 
