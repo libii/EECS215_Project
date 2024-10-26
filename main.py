@@ -2,7 +2,6 @@ import csv
 from DataSet import DataSet #custom class
 
 import numpy as np
-from scipy.sparse import csgraph
 
 
 def load_csv(file_name:str, directory:str="Data/")->list:
