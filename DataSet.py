@@ -147,8 +147,11 @@ class DataSet:
         return all_nodes
 
     def get_group_matrix(self, group_num:int)->np.ndarray:
-        """Takes in group number and returns adjaceny matrix
-            Return:"""
+        """
+        Takes in group number and returns adjaceny matrix
+        
+        :return: Adjacency list of the group as a numpy array.
+        """
         return self.list_adj_matrix[group_num-1]
     
     # Maybe the data set is doing to much?
