@@ -147,5 +147,19 @@ class DataSet:
         return all_nodes
 
     def get_group_matrix(self, group_num:int)->np.ndarray:
-        """Takes in group number and returns adjaceny matrix"""
+        """
+        Takes in group number and returns adjaceny matrix
+        
+        :return: Adjacency list of the group as a numpy array.
+        """
         return self.list_adj_matrix[group_num-1]
+    
+    # Maybe the data set is doing to much?
+    def get_group_eigenvalue(self, group_num:int)->np.ndarray:
+        """Eigenvalue from a group number.
+
+        #### Note: Not sure it's so useful for conversation graph? Aren't the rows the same number. Maybe I'm wrong. Talk to me about it.
+        :param group_num: Group Number
+            Return: Eigenvalues as a numpy array."""
+        matrix=self.get_group_matrix(group_num)
+        return np.linalg.eig(matrix).eigenvalues
