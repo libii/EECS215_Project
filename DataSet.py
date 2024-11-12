@@ -27,14 +27,14 @@ class DataSet:
     def _extract_group_number(self, graph: str)->int:
         """Accepts a graph from JSON and determines by the group name as a number extracted from the "id" field - Credit: Diana
             :param: graph_id
-            :return: group number"""
+            :returns: group number"""
         match = re.search(r'group-(\d+)', graph)
         return int(match.group(1)) if match else float('inf')  # If no group number, place it at the end
 
     def _load_json(self, file_name:str)->dict:
         """Load one json from Data directory
             :param file_name: Filename
-            eturns:
+            :returns:
                     dict: Of one item, the JSON Data as a dictionary"""
         if os.path.isfile(self._directory+file_name) and os.access(self._directory+file_name, os.R_OK):
             file_path=self._directory+file_name
