@@ -48,10 +48,10 @@ class DataSet:
         """Sort JSON data in the class and updates self.json. - Credit: Diana"""
         self.json["graphs"]=sorted(self.json["graphs"], key=lambda x: self._extract_group_number(x["id"]))
 
-    def _create_np_matrix(self, graph:list)->np.darray:
+    def _create_np_matrix(self, graph:list)->np.ndarray:
         """Takes 1 group as a graph from the JSON dict then this creates numpy 4x4 ajacency matrix from the parse data. Index corresponds to nodes: A=0, B=1, C=2, D=3. Values are edges between the nodes. Accounts for directed and undirected graphs.
            :param graph: One graph from the JSON dictionary.
-           :returns: np.darray - Adjaceny matrix in the for of a numpy array."""
+           :returns: np.ndarray - Adjaceny matrix in the for of a numpy array."""
                 
         matrix = np.zeros((4, 4)) #intializes numpy array
 
