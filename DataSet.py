@@ -27,14 +27,14 @@ class DataSet:
     def _extract_group_number(self, graph: str)->int:
         """Accepts a graph from JSON and determines by the group name as a number extracted from the "id" field - Credit: Diana
             :param: graph_id
-                Return: group number"""
+            :return: group number"""
         match = re.search(r'group-(\d+)', graph)
         return int(match.group(1)) if match else float('inf')  # If no group number, place it at the end
 
     def _load_json(self, file_name:str)->dict:
         """Load one json from Data directory
             :param file_name: Filename
-                Returns:
+            eturns:
                     dict: Of one item, the JSON Data as a dictionary"""
         if os.path.isfile(self._directory+file_name) and os.access(self._directory+file_name, os.R_OK):
             file_path=self._directory+file_name
@@ -48,11 +48,11 @@ class DataSet:
         """Sort JSON data in the class and updates self.json. - Credit: Diana"""
         self.json["graphs"]=sorted(self.json["graphs"], key=lambda x: self._extract_group_number(x["id"]))
 
-    def _create_np_matrix(self, graph:list)->list:
+    def _create_np_matrix(self, graph:list)->np.darray:
         """Takes 1 group as a graph from the JSON dict then this creates numpy 4x4 ajacency matrix from the parse data. Index corresponds to nodes: A=0, B=1, C=2, D=3. Values are edges between the nodes. Accounts for directed and undirected graphs.
            :param graph: One graph from the JSON dictionary.
-            Returns:
-                np.darray: Adjaceny matrix in the for of a numpy array."""
+           :returns: np.darray - Adjaceny matrix in the for of a numpy array."""
+                
         matrix = np.zeros((4, 4)) #intializes numpy array
 
         # creates matrix representation
@@ -121,7 +121,7 @@ class DataSet:
     def get_sum_group_nodes(self, group_num:int)->list:
         """Calculate the total of the node value for a group. Does this by summing row of adjaceny array for each row.
             :param group_num: Group number
-                Returns: A list of node values for a single group that is ordered by the node name alphabetically."""
+            :returns: A list of node values for a single group that is ordered by the node name alphabetically."""
         matrix=self.list_adj_matrix[group_num-1]
         nodes=[]
         for V in matrix:
@@ -134,7 +134,7 @@ class DataSet:
     def get_sum_all_nodes(self)->list:
         """Creates a list of all participants data ordered by group (and within the group the participants is order alphabetically).
         0:group 1, particpant a, group 1, participant b, group 1, participant c, group 1, participant d, group 2, participant a...
-            Return: Ordered list of all nodes."""
+        :return: Ordered list of all nodes."""
         all_nodes=[]
 
         for i in range(len(self.json["graphs"])):
@@ -150,7 +150,7 @@ class DataSet:
         """
         Takes in group number and returns adjaceny matrix
         
-        :return: Adjacency list of the group as a numpy array.
+        :returns: Adjacency list of the group as a numpy array.
         """
         return self.list_adj_matrix[group_num-1]
     
@@ -160,6 +160,6 @@ class DataSet:
 
         #### Note: Not sure it's so useful for conversation graph? Aren't the rows the same number. Maybe I'm wrong. Talk to me about it.
         :param group_num: Group Number
-            Return: Eigenvalues as a numpy array."""
+        :returns: Eigenvalues as a numpy array."""
         matrix=self.get_group_matrix(group_num)
         return np.linalg.eig(matrix).eigenvalues
