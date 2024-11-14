@@ -3,7 +3,13 @@ import json
 import argparse
 import re
 import numpy as np
-from pprint import pprint
+from pprint import pprint 
+
+#define softmax with np
+def softmax(x):
+    e_x = np.exp(x - np.max(x))
+    return e_x / e_x.sum(axis = 0)
+
 
 class DataSet:
     "created a data set from a json"
@@ -167,7 +173,7 @@ class DataSet:
     def get_group_energy(self, group_num:int):
         #initialize energy
         energy = 0
-        
+
         #get the group eigen values with the input as a np array
         eigen_vector = self.get_group_eigenvalue(group_num)
 
@@ -176,3 +182,10 @@ class DataSet:
             energy += abs(eigen)
 
         return energy
+   
+    def get_group_imbalance(self, group_num:int):
+        #grab the eigen array of that group
+        eigen_vector = self.get_group_eigenvalue(group_num)
+
+        #return the softmax of the vector, i am not sure if we need to transpose the vector, pls check the shape, i have this working for shape (n,1)
+        return softmax(eigen_vector)
