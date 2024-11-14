@@ -1,7 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\Class_Files\\visualizations",
+    "\\Data"
   ],
-  "SelectedNode": "\\C:\\Users\\Rosalie\\Source\\Repos\\EECS215_Project",
+  "SelectedNode": "\\OptimalClusterFinder.py",
   "PreviewInSolutionExplorer": false
 }
