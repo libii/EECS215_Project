@@ -163,3 +163,16 @@ class DataSet:
             Return: Eigenvalues as a numpy array."""
         matrix=self.get_group_matrix(group_num)
         return np.linalg.eig(matrix).eigenvalues
+
+    def get_group_energy(self, group_num:int):
+        #initialize energy
+        energy = 0
+        
+        #get the group eigen values with the input as a np array
+        eigen_vector = self.get_group_eigenvalue(group_num)
+
+        #sum of absolute values of eigen values
+        for eigen in eigen_vector:
+            energy += abs(eigen)
+
+        return energy
