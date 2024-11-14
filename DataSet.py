@@ -163,3 +163,11 @@ class DataSet:
         :returns: Eigenvalues as a numpy array."""
         matrix=self.get_group_matrix(group_num)
         return np.linalg.eig(matrix).eigenvalues
+
+    def l2_normalize(self, group_num)->np.ndarray:
+        """Takes a group number L2 Normalization of the adjacency list
+        :param group_num: group number
+        :returns: (str) matrix normalize with l2"""
+        group_matrix=self.get_group_matrix(group_num=group_num)
+        #compute l2 on each row
+        return group_matrix / np.linalg.norm(group_matrix, ord=1)
