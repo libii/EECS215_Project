@@ -190,36 +190,50 @@ class DataSet:
         #return the softmax of the vector, i am not sure if we need to transpose the vector, pls check the shape, i have this working for shape (n,1)
         return softmax(eigen_vector)
 
-    def _l2_normalize_matrix(self, group_matrix:np.ndarray)->np.ndarray:
-        """Takes a group number L2 Normalization of the adjacency list
+    def _normalize_matrix(self, group_matrix:np.ndarray, type:int)->np.ndarray:
+        """Takes a group number L? Normalization of the adjacency list
         :param group_matrix: (ndarray) matrix of one group
+        :param type: takes a number that indicates l1 or l2 normalization. 1=l1, 2=l2
         :returns: (str) matrix normalize with l2"""
-        #compute l2 on each row
 
         #this epislon is here to prevent divide by zero - smallest epislon for float64
         #if you want to change the percision to float32 replace float 64 with it.
+        #compute l2 on each column
         epsilon = np.finfo(np.float64).eps
+        if type == 2:
+            l2_norms = np.maximum(group_matrix, epsilon)
+            return group_matrix / (np.linalg.norm(l2_norms, axis=0))
+        
+        if type == 1:
+            #### By Column - it gave me all 1s after the sum wtf
+            l1_norms = np.sum(np.abs(group_matrix), axis=0)
 
-        return group_matrix / (np.linalg.norm(group_matrix, axis=0)+epsilon)
+            #prevent divide by zero
+            l1_norms = np.maximum(l1_norms, epsilon)
+
+            return group_matrix / l1_norms
+
+            #### By Row - feels wrong, worth a shot
+            # l1_norm_rows = np.sum(np.abs(group_matrix), axis=1)
+
+            # return group_matrix / l1_norm_rows[:, np.newaxis]  # Use broadcasting for row-wise division
+
+        
+        #if you made it here you messed up
+        return None
     
-    def get_sum_all_nodes_normalize(self):
+    def get_sum_all_nodes_normalize(self, num:int):
         """
         Returns a 1-dimensional vector of sums of normalized edges for all nodes.
         """
         all_nodes = []
-
+        
         # Iterate over each node's adjacency list
-        for i in range(len(self.list_adj_matrix)):  # Check if 11 is the correct number of iterations
-            for v in self.list_adj_matrix[i]:
-                norm_adj = self._l2_normalize_matrix(v)  # Normalize adjacency matrix
-
-                # Sum the normalized edges for the current node
-                sum = 0
-                for edge in norm_adj:
-                    sum += edge
-                
-                # Append the sum for the current node
-                all_nodes.append(sum)
+        for adj_matrix in self.list_adj_matrix:  # Check if 11 is the correct number of iterations
+            norm_adj = self._normalize_matrix(adj_matrix, num)  # Normalize adjacency matrix
+            for row in norm_adj:
+                #sum all the rows
+                all_nodes.append(row.sum())# Append the sum for the current node
         
         # Return all nodes as a 1D list (flattened vector)
         return all_nodes
