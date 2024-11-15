@@ -190,10 +190,37 @@ class DataSet:
         #return the softmax of the vector, i am not sure if we need to transpose the vector, pls check the shape, i have this working for shape (n,1)
         return softmax(eigen_vector)
 
-    def l2_normalize(self, group_num)->np.ndarray:
+    def _l2_normalize_matrix(self, group_matrix:np.ndarray)->np.ndarray:
         """Takes a group number L2 Normalization of the adjacency list
-        :param group_num: group number
+        :param group_matrix: (ndarray) matrix of one group
         :returns: (str) matrix normalize with l2"""
-        group_matrix=self.get_group_matrix(group_num=group_num)
         #compute l2 on each row
-        return group_matrix / np.linalg.norm(group_matrix, ord=1)
+
+        #this epislon is here to prevent divide by zero - smallest epislon for float64
+        #if you want to change the percision to float32 replace float 64 with it.
+        epsilon = np.finfo(np.float64).eps
+
+        return group_matrix / (np.linalg.norm(group_matrix, axis=0)+epsilon)
+    
+    def get_sum_all_nodes_normalize(self):
+        """
+        Returns a 1-dimensional vector of sums of normalized edges for all nodes.
+        """
+        all_nodes = []
+
+        # Iterate over each node's adjacency list
+        for i in range(len(self.list_adj_matrix)):  # Check if 11 is the correct number of iterations
+            for v in self.list_adj_matrix[i]:
+                norm_adj = self._l2_normalize_matrix(v)  # Normalize adjacency matrix
+
+                # Sum the normalized edges for the current node
+                sum = 0
+                for edge in norm_adj:
+                    sum += edge
+                
+                # Append the sum for the current node
+                all_nodes.append(sum)
+        
+        # Return all nodes as a 1D list (flattened vector)
+        return all_nodes
+
