@@ -238,13 +238,6 @@ def main():
     ax.set_zlabel('Shared Atten Count') # feature 3 - aka ndarray col 2
     ax.legend()
 
-    #must save before show
-    graph_name="prox_convo_attention"
-    path=os.getcwd() 
-    path += "/Graphs/All_Participant/Summed_Nodes/"
-    path +="3d_"+ graph_name +".png"
-    plt.savefig(path)
-
     ######## Plotting 2 feature of 3 feature Graph#####
     x_axis=1 #talking duration
     y_axis=2 #attention
@@ -315,7 +308,7 @@ def main():
     graph_name="unnormalized_summed_nodes"
     path=os.getcwd() 
     path += "/Graphs/All_Participant/Summed_Nodes/"
-    path +="2d_"+ graph_name +"_of_3d.png"
+    path += graph_name +"_of_for_3features.png"
     plt.savefig(path)
 
     # Add Verticle Space Padding
