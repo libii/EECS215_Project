@@ -61,10 +61,12 @@ def main():
     compelition=clean_compeletion_csv(load_csv("completion_time_and_accuracy.csv"))
 
     # print time of first group - note: first in the tuple
-    print(compelition[0][0])
+    print(f"Time of first Group:\t\t{compelition[0][0]}\n")
+    #print(compelition[0][0])
 
     # print accuracy of first group - note: seconds in the tuple
-    print(compelition[0][1])
+    print(f"accuracy of first Group:\t{compelition[0][1]}\n")
+    #print(compelition[0][1])
 
     #load json data - must give a file name, can also take another folder relative to the location of the current file that calls it in the directory
     convo_data=DataSet("conversation_graphs.json")
@@ -79,13 +81,14 @@ def main():
     # prox_data.print_adj_matrix() # it's long
     
     # Gets numpy ajacency matrix from a group
-    print(prox_data.get_group_matrix(2))
+    print(f"Numpy Adjacency Matrix from Group:\n{prox_data.get_group_matrix(2)}\n")
 
     # calculate nodes of group and puts it in a list - order of participant: a, b, c, d
-    print(prox_data.get_sum_group_nodes(2))
+    print(f"Calculates Nodes of group:\n{prox_data.get_sum_group_nodes(2)}\n")
 
     # calculate all nodes of dataset in a list - order by group number (and participant is ordered is a, b, c, d)
-    print(prox_data.get_sum_all_nodes())
+    print(f"Calculated nodes of dataset; ordered [a,b,c,d]:\n" +
+        f"{prox_data.get_sum_all_nodes()}\n")
 
     #numpy array where data set is column and nodes are rows
     all_data=np.zeros((total_participants,3))
@@ -101,10 +104,10 @@ def main():
     #  rename your file so there aren't merge conflicts. Also, we should really talk to each other to figure out how to use kmeans
 
     # Eigenvalues
-    print(np.linalg.eig(atten_data.list_adj_matrix[0]).eigenvalues)
+    print(f"Eigenvalues:\n{np.linalg.eig(atten_data.list_adj_matrix[0]).eigenvalues}\n")
 
     #Eigenvector
-    print(np.linalg.eig(atten_data.list_adj_matrix[0]).eigenvectors)
+    print(f"Eigenvectors:\n{np.linalg.eig(atten_data.list_adj_matrix[0]).eigenvectors}\n")
 
 
 
