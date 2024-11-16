@@ -54,7 +54,7 @@ for i, graph_data in enumerate(sorted_graphs):
 
     # Add nodes with labels
     for node in graph_data["nodes"]:
-        G.add_node(node)
+        add_weighted_edges_fromadd_node(node)
 
     # Add directed edges with weights
     for edge in graph_data["edges"]:
@@ -74,7 +74,7 @@ for i, graph_data in enumerate(sorted_graphs):
     nx.draw_networkx_labels(G, pos, ax=axes[i], labels={node: node for node in G.nodes()}, font_size=12)
 
     # Draw directed edges with curved connections, unique colors, and edge labels (weights)
-    for edge in G.edges(data=True):
+    for edge in add_weighted_edges_fromedges(data=True):
         source, target, data = edge
         color = node_colors[source]  # Color based on the source node
         thickness = (data['weight'] / max_weight) * 25  # Scale thickness based on max weight
