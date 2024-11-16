@@ -1,0 +1,183 @@
+# grab data
+import csv
+
+import matplotlib
+from DataSet import DataSet #custom class
+import numpy as np #scikit-learn requires this
+import itertools
+
+
+#kmeans
+from sklearn.cluster import KMeans #sci-kit learn
+import matplotlib.pyplot as plt # plotting
+from mpl_toolkits.mplot3d import Axes3D #3D MatPlotLib - if you have matplotlib, you have this
+
+#benchmark tutorial
+from time import time
+from sklearn import metrics
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import KMeans
+from sklearn.decomposition import PCA
+
+#save
+import os
+
+#debugging
+from pprint import pprint 
+
+def load_csv(file_name:str, directory:str="Data/")->list:
+    """Load CSV from Data directory.
+    :param file_name: Filename
+    :param directory: Directory where file is stored.
+    :returns: CSV data as a list contain a list for rows. Each row represents a group."""
+    file_path="Data/"
+    file_path+=file_name
+    with open(file_path, 'r') as file:
+        csv_reader = csv.reader(file)
+        data = []
+        for row in csv_reader:
+            data.append(row)
+    return data
+
+def clean_compeletion_csv(data:list)->tuple:
+    """Cleans up time/accuracy CSV for convient use.
+        :param data: List of list from load_csv(file_name) where each row is a group.
+        :returns: List of tuples (time (in secs):float, accuracy as percentage:float) with each row represents a group."""
+    clean_data=[]
+    data=data[1:]
+    for row in data:
+        junk, junk2, time = row[1].split()
+        hours, minutes, seconds = map(float, time.split(':'))
+        in_seconds = minutes * 60 + seconds
+        clean_data.append((in_seconds,float(row[2])))
+    return clean_data
+
+    #k-means documention: https://scikit-learn.org/1.5/modules/generated/sklearn.cluster.KMeans.html
+    #k-mean tutorial: https://scikit-learn.org/1.5/auto_examples/cluster/plot_kmeans_digits.html#sphx-glr-auto-examples-cluster-plot-kmeans-digits-py
+
+def elbow_method(data:np.ndarray):
+    """Makes a plot using elbow methods for choosing clusters. Not as good as sillouete methods. But I did it because of a tuturial. I left it here but we will probably never use it."""
+    inertia = []
+    range_of_k = range(1, 11) # tries out different clusters from 1-10
+
+    for k in range_of_k:
+        kmeans = KMeans(n_clusters=k, random_state=33) # 42 is the seed because of Hitchhikers Guide. It's popularly used in tutorial. But I like 33 today
+        kmeans.fit(data)
+        inertia.append(kmeans.inertia_)
+
+    plt.plot(range_of_k, inertia, marker='o')
+    plt.title('The Elbow Method')
+    plt.xlabel('# of Clusters')
+    plt.ylabel('Inertia')
+    plt.show() #### based on the graph 3 looks good. Because 3 has low enirtia 
+
+def get_names(num_groups)->list:
+    """Made this so I can add names to the dots in the matplotlib charts.
+    :returns: array of strings with names of each person [g#, letter], where g# is the group number and letter is the person in the group (person a, person b, person c, person d)"""
+    
+    total_participants=num_groups
+    names=[]
+    p=None
+    for i in range(num_groups*4):
+        if i % 4 == 0:
+            p=4
+        else:
+            p=i%4
+        names.append(f'g{(i//4)+1}, {chr(96+p)}')
+    return names
+
+def stub(my_string:str="stub"):
+    """function stub
+       :param my_string: a string
+       :returns: (str) a string"""
+    return my_string
+
+def main():
+    num_groups=11
+    total_participants=num_groups*4
+    
+    #load json data - must give a file name, can also take another folder relative to the location of the current file that calls it in the directory
+    prox_data=DataSet("proximity_graphs.json")
+    convo_data=DataSet("conversation_graphs.json")
+    atten_data=DataSet("shared_attention_graphs.json")
+
+    fig = plt.figure(figsize=(15, 5))
+    data_sets=2
+    num_clusters = 3
+    data_features=np.zeros((total_participants,data_sets))
+
+    #Overhead: so I can do this in one snazzy loop
+    features=[prox_data,convo_data, atten_data]
+    axises=[(0,1),(0,2),(1,2)]
+    axis_name=["Talking", "Proximity", "Attention"]
+    x_axis=0 #proximity
+    y_axis=1 #talking
+    name_labels=get_names(num_groups=11)
+
+    #Doing 2 Feature Kmeans for 3 combos of graphs
+    for index, axis in enumerate(axises):
+        for i in range(total_participants):
+            data_features[i][0]=features[axis[0]].get_sum_all_nodes()[i]
+            data_features[i][1]=features[axis[1]].get_sum_all_nodes()[i]
+
+        ###### Make K Means Model and Extract Features ##########
+
+        data=data_features
+
+        # Create KMeans model and fit the data
+        kmeans = KMeans(n_clusters=num_clusters, random_state=21) # seed at 21 because of forever 21
+        kmeans.fit(data)
+
+        # After the model is made, get the cluster centroids and labels
+        centroids = kmeans.cluster_centers_ # the center points of the cluster generated by the Kmeans model for each feature
+        labels = kmeans.labels_ # returns labels for each feature - this is useful because it tells us who is in what roles
+
+        roles=[[] for _ in range(num_clusters)]
+        p=None
+
+        for i, label in enumerate(labels):
+            if i % 4 == 0:
+                p=4
+            else:
+                p=i%4
+            roles[label].append(f'g{(i//4)+1}, {chr(96+p)}')
+
+        ### prints roles define by k cluster
+        # print(f'Role 1\tRole 2\tRole 3')#there is 3 if num_clusters=3
+        # print(2 * "_")
+
+        # for element in itertools.zip_longest(*roles):
+        #     print(f'{element[0]}\t{element[1]}\t{element[2]}')#there is 3 if num_clusters=3
+
+        ######## Plotting 2 feature of 3 feature Graph ########
+
+        num=130+1+index
+        ax1 = fig.add_subplot(num)
+
+        # Scatter plot
+        for i in range(num_clusters):
+            ax1.scatter(data[labels == i, x_axis], data[labels == i, y_axis], label=f'Cluster {i + 1}')
+
+        # labels put in the plot
+        for i in range(total_participants):
+            ax1.text(data[i, x_axis], data[i, y_axis], name_labels[i])  # Label each point with its index
+
+        # Plot centroids - center dots for clusters
+        ax1.scatter(centroids[:, x_axis], centroids[:, y_axis], s=350, c='red', marker='X', label='Centroids')
+
+        ax1.set_title(f'Kmeans for 2 Feature - {axis_name[axis[0]]} and {axis_name[axis[1]]}')
+        ax1.set_xlabel(f'{axis_name[axis[0]]}')
+        ax1.set_ylabel(f'{axis_name[axis[1]]}')
+        ax1.legend()
+
+    graph_name="unnormalized_summed_nodes"
+    path=os.getcwd() 
+    path += "/Graphs/All_Participant/Summed_Nodes/"
+    path += graph_name +"_of_for_3features.png"
+    plt.savefig(path)
+
+    plt.show()
+
+if __name__ == "__main__":
+    main()
