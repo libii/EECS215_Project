@@ -188,6 +188,7 @@ def main():
             p=i%4
         print(f"Group {i+1}: Silhouette Score = {score:.3f}")
 
+
     roles=[[] for _ in range(num_clusters)] # 3 if 3 labels, 4 if 4 labels. undecided
     p=None
 
