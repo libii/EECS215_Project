@@ -1,0 +1,774 @@
+{
+    "graphs": [
+        {
+            "id": "group-10-speaking-duration-graph",
+            "directed": false,
+            "type": "undirected",
+            "label": "Speaking Duration Graph - Group 10",
+            "nodes": {
+                "A": {
+                    "label": "Person A"
+                },
+                "B": {
+                    "label": "Person B"
+                },
+                "C": {
+                    "label": "Person C"
+                },
+                "D": {
+                    "label": "Person D"
+                }
+            },
+            "edges": [
+                {
+                    "source": "A",
+                    "target": "B",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 96.354
+                    }
+                },
+                {
+                    "source": "A",
+                    "target": "C",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 80.7615
+                    }
+                },
+                {
+                    "source": "A",
+                    "target": "D",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 123.972
+                    }
+                },
+                {
+                    "source": "B",
+                    "target": "C",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 65.169
+                    }
+                },
+                {
+                    "source": "B",
+                    "target": "D",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 151.59
+                    }
+                },
+                {
+                    "source": "C",
+                    "target": "D",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 108.3795
+                    }
+                }
+            ]
+        },
+        {
+            "id": "group-8-speaking-duration-graph",
+            "directed": false,
+            "type": "undirected",
+            "label": "Speaking Duration Graph - Group 8",
+            "nodes": {
+                "A": {
+                    "label": "Person A"
+                },
+                "B": {
+                    "label": "Person B"
+                },
+                "C": {
+                    "label": "Person C"
+                },
+                "D": {
+                    "label": "Person D"
+                }
+            },
+            "edges": [
+                {
+                    "source": "A",
+                    "target": "B",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 28.818
+                    }
+                },
+                {
+                    "source": "A",
+                    "target": "C",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 83.2455
+                    }
+                },
+                {
+                    "source": "A",
+                    "target": "D",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 53.655
+                    }
+                },
+                {
+                    "source": "B",
+                    "target": "C",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 104.4195
+                    }
+                },
+                {
+                    "source": "B",
+                    "target": "D",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 74.829
+                    }
+                },
+                {
+                    "source": "C",
+                    "target": "D",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 129.2565
+                    }
+                }
+            ]
+        },
+        {
+            "id": "group-6-speaking-duration-graph",
+            "directed": false,
+            "type": "undirected",
+            "label": "Speaking Duration Graph - Group 6",
+            "nodes": {
+                "A": {
+                    "label": "Person A"
+                },
+                "B": {
+                    "label": "Person B"
+                },
+                "C": {
+                    "label": "Person C"
+                },
+                "D": {
+                    "label": "Person D"
+                }
+            },
+            "edges": [
+                {
+                    "source": "A",
+                    "target": "B",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 185.3635
+                    }
+                },
+                {
+                    "source": "A",
+                    "target": "C",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 191.3705
+                    }
+                },
+                {
+                    "source": "A",
+                    "target": "D",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 178.04
+                    }
+                },
+                {
+                    "source": "B",
+                    "target": "C",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 35.91
+                    }
+                },
+                {
+                    "source": "B",
+                    "target": "D",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 22.5795
+                    }
+                },
+                {
+                    "source": "C",
+                    "target": "D",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 28.5865
+                    }
+                }
+            ]
+        },
+        {
+            "id": "group-9-speaking-duration-graph",
+            "directed": false,
+            "type": "undirected",
+            "label": "Speaking Duration Graph - Group 9",
+            "nodes": {
+                "A": {
+                    "label": "Person A"
+                },
+                "B": {
+                    "label": "Person B"
+                },
+                "C": {
+                    "label": "Person C"
+                },
+                "D": {
+                    "label": "Person D"
+                }
+            },
+            "edges": [
+                {
+                    "source": "A",
+                    "target": "B",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 28.6395
+                    }
+                },
+                {
+                    "source": "A",
+                    "target": "C",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 42.635
+                    }
+                },
+                {
+                    "source": "A",
+                    "target": "D",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 36.8715
+                    }
+                },
+                {
+                    "source": "B",
+                    "target": "C",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 43.4985
+                    }
+                },
+                {
+                    "source": "B",
+                    "target": "D",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 37.735
+                    }
+                },
+                {
+                    "source": "C",
+                    "target": "D",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 51.7305
+                    }
+                }
+            ]
+        },
+        {
+            "id": "group-4-speaking-duration-graph",
+            "directed": false,
+            "type": "undirected",
+            "label": "Speaking Duration Graph - Group 4",
+            "nodes": {
+                "A": {
+                    "label": "Person A"
+                },
+                "B": {
+                    "label": "Person B"
+                },
+                "C": {
+                    "label": "Person C"
+                },
+                "D": {
+                    "label": "Person D"
+                }
+            },
+            "edges": [
+                {
+                    "source": "A",
+                    "target": "B",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 43.603
+                    }
+                },
+                {
+                    "source": "A",
+                    "target": "C",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 56.508
+                    }
+                },
+                {
+                    "source": "A",
+                    "target": "D",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 51.259
+                    }
+                },
+                {
+                    "source": "B",
+                    "target": "C",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 43.516
+                    }
+                },
+                {
+                    "source": "B",
+                    "target": "D",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 38.767
+                    }
+                },
+                {
+                    "source": "C",
+                    "target": "D",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 51.672
+                    }
+                }
+            ]
+        },
+        {
+            "id": "group-2-speaking-duration-graph",
+            "directed": false,
+            "type": "undirected",
+            "label": "Speaking Duration Graph - Group 2",
+            "nodes": {
+                "A": {
+                    "label": "Person A"
+                },
+                "B": {
+                    "label": "Person B"
+                },
+                "C": {
+                    "label": "Person C"
+                },
+                "D": {
+                    "label": "Person D"
+                }
+            },
+            "edges": [
+                {
+                    "source": "A",
+                    "target": "B",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 67.019
+                    }
+                },
+                {
+                    "source": "A",
+                    "target": "C",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 36.2215
+                    }
+                },
+                {
+                    "source": "A",
+                    "target": "D",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 16.208
+                    }
+                },
+                {
+                    "source": "B",
+                    "target": "C",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 72.9335
+                    }
+                },
+                {
+                    "source": "B",
+                    "target": "D",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 52.92
+                    }
+                },
+                {
+                    "source": "C",
+                    "target": "D",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 22.1225
+                    }
+                }
+            ]
+        },
+        {
+            "id": "group-3-speaking-duration-graph",
+            "directed": false,
+            "type": "undirected",
+            "label": "Speaking Duration Graph - Group 3",
+            "nodes": {
+                "A": {
+                    "label": "Person A"
+                },
+                "B": {
+                    "label": "Person B"
+                },
+                "C": {
+                    "label": "Person C"
+                },
+                "D": {
+                    "label": "Person D"
+                }
+            },
+            "edges": [
+                {
+                    "source": "A",
+                    "target": "B",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 30.4255
+                    }
+                },
+                {
+                    "source": "A",
+                    "target": "C",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 30.9405
+                    }
+                },
+                {
+                    "source": "A",
+                    "target": "D",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 57.7565
+                    }
+                },
+                {
+                    "source": "B",
+                    "target": "C",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 54.413
+                    }
+                },
+                {
+                    "source": "B",
+                    "target": "D",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 81.229
+                    }
+                },
+                {
+                    "source": "C",
+                    "target": "D",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 81.744
+                    }
+                }
+            ]
+        },
+        {
+            "id": "group-7-speaking-duration-graph",
+            "directed": false,
+            "type": "undirected",
+            "label": "Speaking Duration Graph - Group 7",
+            "nodes": {
+                "A": {
+                    "label": "Person A"
+                },
+                "B": {
+                    "label": "Person B"
+                },
+                "C": {
+                    "label": "Person C"
+                },
+                "D": {
+                    "label": "Person D"
+                }
+            },
+            "edges": [
+                {
+                    "source": "A",
+                    "target": "B",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 38.744
+                    }
+                },
+                {
+                    "source": "A",
+                    "target": "C",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 55.509
+                    }
+                },
+                {
+                    "source": "A",
+                    "target": "D",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 126.52
+                    }
+                },
+                {
+                    "source": "B",
+                    "target": "C",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 39.563
+                    }
+                },
+                {
+                    "source": "B",
+                    "target": "D",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 110.574
+                    }
+                },
+                {
+                    "source": "C",
+                    "target": "D",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 127.339
+                    }
+                }
+            ]
+        },
+        {
+            "id": "group-5-speaking-duration-graph",
+            "directed": false,
+            "type": "undirected",
+            "label": "Speaking Duration Graph - Group 5",
+            "nodes": {
+                "A": {
+                    "label": "Person A"
+                },
+                "B": {
+                    "label": "Person B"
+                },
+                "C": {
+                    "label": "Person C"
+                },
+                "D": {
+                    "label": "Person D"
+                }
+            },
+            "edges": [
+                {
+                    "source": "A",
+                    "target": "B",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 8.6825
+                    }
+                },
+                {
+                    "source": "A",
+                    "target": "C",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 12.8845
+                    }
+                },
+                {
+                    "source": "A",
+                    "target": "D",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 32.9655
+                    }
+                },
+                {
+                    "source": "B",
+                    "target": "C",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 18.31
+                    }
+                },
+                {
+                    "source": "B",
+                    "target": "D",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 38.391
+                    }
+                },
+                {
+                    "source": "C",
+                    "target": "D",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 42.593
+                    }
+                }
+            ]
+        },
+        {
+            "id": "group-1-speaking-duration-graph",
+            "directed": false,
+            "type": "undirected",
+            "label": "Speaking Duration Graph - Group 1",
+            "nodes": {
+                "A": {
+                    "label": "Person A"
+                },
+                "B": {
+                    "label": "Person B"
+                },
+                "C": {
+                    "label": "Person C"
+                },
+                "D": {
+                    "label": "Person D"
+                }
+            },
+            "edges": [
+                {
+                    "source": "A",
+                    "target": "B",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 129.4615
+                    }
+                },
+                {
+                    "source": "A",
+                    "target": "C",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 32.5515
+                    }
+                },
+                {
+                    "source": "A",
+                    "target": "D",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 65.2215
+                    }
+                },
+                {
+                    "source": "B",
+                    "target": "C",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 120.72
+                    }
+                },
+                {
+                    "source": "B",
+                    "target": "D",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 153.39
+                    }
+                },
+                {
+                    "source": "C",
+                    "target": "D",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 56.48
+                    }
+                }
+            ]
+        },
+        {
+            "id": "group-11-speaking-duration-graph",
+            "directed": false,
+            "type": "undirected",
+            "label": "Speaking Duration Graph - Group 11",
+            "nodes": {
+                "A": {
+                    "label": "Person A"
+                },
+                "B": {
+                    "label": "Person B"
+                },
+                "C": {
+                    "label": "Person C"
+                },
+                "D": {
+                    "label": "Person D"
+                }
+            },
+            "edges": [
+                {
+                    "source": "A",
+                    "target": "B",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 34.948
+                    }
+                },
+                {
+                    "source": "A",
+                    "target": "C",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 86.3655
+                    }
+                },
+                {
+                    "source": "A",
+                    "target": "D",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 26.7975
+                    }
+                },
+                {
+                    "source": "B",
+                    "target": "C",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 98.4985
+                    }
+                },
+                {
+                    "source": "B",
+                    "target": "D",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 38.9305
+                    }
+                },
+                {
+                    "source": "C",
+                    "target": "D",
+                    "relation": "speaking_duration",
+                    "metadata": {
+                        "weight": 90.348
+                    }
+                }
+            ]
+        }
+    ]
+}
