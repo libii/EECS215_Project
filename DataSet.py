@@ -178,6 +178,7 @@ class DataSet:
 
         #get the group eigen values with the input as a np array
         eigen_vector = self.get_group_eigenvalue(group_num)
+        
 
         #sum of absolute values of eigen values
         for eigen in eigen_vector:
@@ -188,7 +189,6 @@ class DataSet:
     def get_group_laplacian_eigenvalue(self, group_num:int)->np.ndarray:
         matrix=laplacian(self.get_group_matrix(group_num))
         return np.linalg.eig(matrix).eigenvalues
-
 
     def get_group_energy_laplacian(self, group_num:int):
         #initialize energy
