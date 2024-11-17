@@ -189,6 +189,9 @@ class DataSet:
         matrix=laplacian(self.get_group_matrix(group_num))
         return np.linalg.eig(matrix).eigenvalues
 
+    def get_group_laplacian_eigenvalue_normed(self, group_num:int)->np.ndarray:
+        matrix=laplacian(self.get_group_matrix(group_num), normed=True)
+        return np.linalg.eig(matrix).eigenvalues
 
     def get_group_energy_laplacian(self, group_num:int):
         #initialize energy
