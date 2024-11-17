@@ -186,7 +186,7 @@ def main():
             p=4
         else:
             p=i%4
-        print(f"Group {i+1}: Silhouette Score = {score:.3f}")
+        print(f"Group {i+1}: Silhouette Score = {score}")
 
     roles=[[] for _ in range(num_clusters)] # 3 if 3 labels, 4 if 4 labels. undecided
     p=None
@@ -228,7 +228,7 @@ def main():
     # Plot centroids - center dots for clusters
     ax.scatter(centroids[:, 0], centroids[:, 1], centroids[:, 2], s=350, c='red', marker='X', label='Centroids')
 
-    ax.set_title('KMeans Clustering in 3 Feature with Group Energies')
+    ax.set_title('KMeans Clustering in 3 Feature with L2 Normal Laplacian Group Energies')
     ax.set_xlabel('Prox Count') # feature 1 - aka ndarray col 0
     ax.set_ylabel('Talking Duration') # feature 2 - aka ndarray col 1
     ax.set_zlabel('Shared Atten Count') # feature 3 - aka ndarray col 2
