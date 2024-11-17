@@ -3,7 +3,9 @@ import json
 import argparse
 import re
 import numpy as np
+from scipy.sparse.csgraph import laplacian
 from pprint import pprint 
+
 
 #define softmax with np
 def softmax(x):
@@ -183,12 +185,23 @@ class DataSet:
 
         return energy
    
-    def get_group_imbalance(self, group_num:int):
-        #grab the eigen array of that group
-        eigen_vector = self.get_group_eigenvalue(group_num)
+    def get_group_laplacian_eigenvalue(self, group_num:int)->np.ndarray:
+        matrix=laplacian(self.get_group_matrix(group_num))
+        return np.linalg.eig(matrix).eigenvalues
 
-        #return the softmax of the vector, i am not sure if we need to transpose the vector, pls check the shape, i have this working for shape (n,1)
-        return softmax(eigen_vector)
+
+    def get_group_energy_laplacian(self, group_num:int):
+        #initialize energy
+        energy = 0
+
+        #get the group eigen values with the input as a np array
+        eigen_vector = self.get_group_laplacian_eigenvalue(group_num)
+
+        #sum of absolute values of eigen values
+        for eigen in eigen_vector:
+            energy += abs(eigen)
+
+        return energy
 
     def _normalize_matrix(self, group_matrix:np.ndarray, type:int)->np.ndarray:
         """Takes a group number L? Normalization of the adjacency list
