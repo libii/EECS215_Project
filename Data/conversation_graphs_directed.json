@@ -2,8 +2,8 @@
     "graphs": [
         {
             "id": "group-10-speaking-duration-graph",
-            "directed": true,
-            "type": "directed",
+            "directed": false,
+            "type": "undirected",
             "label": "Speaking Duration Graph - Group 10",
             "nodes": {
                 "A": {
@@ -72,8 +72,8 @@
         },
         {
             "id": "group-8-speaking-duration-graph",
-            "directed": true,
-            "type": "directed",
+            "directed": false,
+            "type": "undirected",
             "label": "Speaking Duration Graph - Group 8",
             "nodes": {
                 "A": {
@@ -142,8 +142,8 @@
         },
         {
             "id": "group-6-speaking-duration-graph",
-            "directed": true,
-            "type": "directed",
+            "directed": false,
+            "type": "undirected",
             "label": "Speaking Duration Graph - Group 6",
             "nodes": {
                 "A": {
@@ -212,8 +212,8 @@
         },
         {
             "id": "group-9-speaking-duration-graph",
-            "directed": true,
-            "type": "directed",
+            "directed": false,
+            "type": "undirected",
             "label": "Speaking Duration Graph - Group 9",
             "nodes": {
                 "A": {
@@ -282,8 +282,8 @@
         },
         {
             "id": "group-4-speaking-duration-graph",
-            "directed": true,
-            "type": "directed",
+            "directed": false,
+            "type": "undirected",
             "label": "Speaking Duration Graph - Group 4",
             "nodes": {
                 "A": {
@@ -352,8 +352,8 @@
         },
         {
             "id": "group-2-speaking-duration-graph",
-            "directed": true,
-            "type": "directed",
+            "directed": false,
+            "type": "undirected",
             "label": "Speaking Duration Graph - Group 2",
             "nodes": {
                 "A": {
@@ -422,8 +422,8 @@
         },
         {
             "id": "group-3-speaking-duration-graph",
-            "directed": true,
-            "type": "directed",
+            "directed": false,
+            "type": "undirected",
             "label": "Speaking Duration Graph - Group 3",
             "nodes": {
                 "A": {
@@ -492,8 +492,8 @@
         },
         {
             "id": "group-7-speaking-duration-graph",
-            "directed": true,
-            "type": "directed",
+            "directed": false,
+            "type": "undirected",
             "label": "Speaking Duration Graph - Group 7",
             "nodes": {
                 "A": {
@@ -562,8 +562,8 @@
         },
         {
             "id": "group-5-speaking-duration-graph",
-            "directed": true,
-            "type": "directed",
+            "directed": false,
+            "type": "undirected",
             "label": "Speaking Duration Graph - Group 5",
             "nodes": {
                 "A": {
@@ -632,8 +632,8 @@
         },
         {
             "id": "group-1-speaking-duration-graph",
-            "directed": true,
-            "type": "directed",
+            "directed": false,
+            "type": "undirected",
             "label": "Speaking Duration Graph - Group 1",
             "nodes": {
                 "A": {
@@ -702,8 +702,8 @@
         },
         {
             "id": "group-11-speaking-duration-graph",
-            "directed": true,
-            "type": "directed",
+            "directed": false,
+            "type": "undirected",
             "label": "Speaking Duration Graph - Group 11",
             "nodes": {
                 "A": {
