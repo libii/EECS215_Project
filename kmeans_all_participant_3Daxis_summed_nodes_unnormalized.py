@@ -3,6 +3,7 @@ import csv
 
 import matplotlib
 from DataSet import DataSet #custom class
+from OptimalClusterFinder import OptimalClusterFinder #custom class
 import numpy as np #scikit-learn requires this
 import itertools
 
@@ -51,22 +52,6 @@ def clean_compeletion_csv(data:list)->tuple:
 
     #k-means documention: https://scikit-learn.org/1.5/modules/generated/sklearn.cluster.KMeans.html
     #k-mean tutorial: https://scikit-learn.org/1.5/auto_examples/cluster/plot_kmeans_digits.html#sphx-glr-auto-examples-cluster-plot-kmeans-digits-py
-
-def elbow_method(data:np.ndarray):
-    """Makes a plot using elbow methods for choosing clusters. Not as good as sillouete methods. But I did it because of a tuturial. I left it here but we will probably never use it."""
-    inertia = []
-    range_of_k = range(1, 11) # tries out different clusters from 1-10
-
-    for k in range_of_k:
-        kmeans = KMeans(n_clusters=k, random_state=33) # 42 is the seed because of Hitchhikers Guide. It's popularly used in tutorial. But I like 33 today
-        kmeans.fit(data)
-        inertia.append(kmeans.inertia_)
-
-    plt.plot(range_of_k, inertia, marker='o')
-    plt.title('The Elbow Method')
-    plt.xlabel('# of Clusters')
-    plt.ylabel('Inertia')
-    plt.show() #### based on the graph 3 looks good. Because 3 has low enirtia 
 
 def bench_k_means(kmeans, name, data, labels):
     """Benchmark to evaluate the KMeans initialization methods.
@@ -148,18 +133,14 @@ def get_names(num_groups)->list:
             p=4
         else:
             p=i%4
-        names.append(f'g{(i//4)+1}, {chr(96+p)}')
+        names.append(f'{(i//4)+1}{chr(96+p)}')
     return names
-
-def stub(my_string:str="stub"):
-    """function stub
-       :param my_string: a string
-       :returns: (str) a string"""
-    return my_string
 
 def main():
     num_groups=11
     total_participants=num_groups*4
+    directory="/Graphs/All_Participant/Summed_Nodes/"
+    graph_name="unnormalized_summed_nodes_of_for_3features"
     
     #loads csv data
     compelition=clean_compeletion_csv(load_csv("completion_time_and_accuracy.csv"))
@@ -178,14 +159,16 @@ def main():
         all_data[i][1]=(convo_data.get_sum_all_nodes()[i]/3)/compelition[(i//4)][0] # when it was summed it was just 3 values repeated
         all_data[i][2]=atten_data.get_sum_all_nodes()[i]/compelition[(i//4)][0]
 
-    # Kmeans Attempt
-    ### Elbow Method #### - https://www.codecademy.com/learn/dspath-unsupervised/modules/dspath-clustering/cheatsheet (first figure)
-    # elbow_method(all_data)
+   # determine # of clusters
+    finder = OptimalClusterFinder(data=all_data, max_clusters=10, graph_name=graph_name,directory=directory)
+    finder.find_optimal_clusters()
+    optimal_clusters = finder.get_optimal_clusters()
+    print(f"")
+    finder.plot_combined_metrics()
 
     ###### Make K Means Model and Extract Features ##########
     # Tell computer to divide in these number of clusters 
-    num_clusters = 3 # used elbow method(data). for our data it was good at 3 n_clusters ... maybe 4 is better? Check the graph. I feel like it's a small change 3, 4.
-    #number of clusters breaks 4 even though i want to try 4
+    num_clusters = 4
     data=all_data
 
     # Create KMeans model and fit the data
@@ -203,16 +186,17 @@ def main():
             p=4
         else:
             p=i%4
-        roles[label].append(f'g{(i//4)+1}, {chr(96+p)}')
+        roles[label].append(f'{(i//4)+1}{chr(96+p)}')
 
     ### prints roles define by k cluster
-    print(f'Role 1\tRole 2\tRole 3')#there is 3 if num_clusters=3
-    print(2 * "_")
+    print('\n'+graph_name)
+    print(f'Role 1\tRole 2\tRole 3\tRole 4')#there is 3 if num_clusters=3
+    print(29 * "_")
 
     for element in itertools.zip_longest(*roles):
-        print(f'{element[0]}\t{element[1]}\t{element[2]}')#there is 3 if num_clusters=3
+        print(f'{element[0]}\t{element[1]}\t{element[2]}\t{element[3]}')#there is 3 if num_clusters=3
 
-    benchmarks(kmeans=kmeans, num_clusters=num_clusters, data=data, labels=labels)
+    # benchmarks(kmeans=kmeans, num_clusters=num_clusters, data=data, labels=labels)
 
     ####### Plotting - 3 Features ######
     # Plotting the results in 3D using axes 3d. Recommend matplotlib for 2d
@@ -305,10 +289,9 @@ def main():
     ax3.legend()
 
     #must save before show
-    graph_name="unnormalized_summed_nodes"
     path=os.getcwd() 
-    path += "/Graphs/All_Participant/Summed_Nodes/"
-    path += graph_name +"_of_for_3features.png"
+    path += directory
+    path += graph_name +".png"
     plt.savefig(path)
 
     # Add Verticle Space Padding

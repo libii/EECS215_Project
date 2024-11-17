@@ -1,6 +1,7 @@
 # grab data
 import csv
 from DataSet import DataSet #custom class
+from OptimalClusterFinder import OptimalClusterFinder #custom class
 import numpy as np #scikit-learn requires this
 import itertools
 
@@ -49,38 +50,6 @@ def clean_compeletion_csv(data:list)->tuple:
 
     #k-means documention: https://scikit-learn.org/1.5/modules/generated/sklearn.cluster.KMeans.html
     #k-mean tutorial: https://scikit-learn.org/1.5/auto_examples/cluster/plot_kmeans_digits.html#sphx-glr-auto-examples-cluster-plot-kmeans-digits-py
-
-def elbow_method(data:np.ndarray):
-    """Makes a plot using elbow methods for choosing clusters. Not as good as sillouete methods. But I did it because of a tuturial. I left it here but we will probably never use it."""
-    inertia = []
-    range_of_k = range(1, 11) # tries out different clusters from 1-10
-
-    for k in range_of_k:
-        kmeans = KMeans(n_clusters=k, random_state=33) # 42 is the seed because of Hitchhikers Guide. It's popularly used in tutorial. But I like 33 today
-        kmeans.fit(data)
-        inertia.append(kmeans.inertia_)
-
-    plt.plot(range_of_k, inertia, marker='o')
-    plt.title('The Elbow Method')
-    plt.xlabel('# of Clusters')
-    plt.ylabel('Inertia')
-    plt.show() #### based on the graph 3 looks good. Because 3 has low enirtia 
-
-def elbow_method_group(data:np.ndarray):
-    """Makes a plot using elbow methods for choosing clusters. Not as good as sillouete methods. But I did it because of a tuturial. I left it here but we will probably never use it."""
-    inertia = []
-    range_of_k = range(1, 5) # tries out different clusters from 1-10
-
-    for k in range_of_k:
-        kmeans = KMeans(n_clusters=k, random_state=33) # 42 is the seed because of Hitchhikers Guide. It's popularly used in tutorial. But I like 33 today
-        kmeans.fit(data)
-        inertia.append(kmeans.inertia_)
-
-    plt.plot(range_of_k, inertia, marker='o')
-    plt.title('The Elbow Method')
-    plt.xlabel('# of Clusters')
-    plt.ylabel('Inertia')
-    plt.show() #### based on the graph 3 looks good. Because 3 has low enirtia 
 
 def bench_k_means(kmeans, name, data, labels):
     """Benchmark to evaluate the KMeans initialization methods.
@@ -165,9 +134,10 @@ def get_names(num_groups)->list:
         names.append(f'g{(i//4)+1}, {chr(96+p)}')
     return names
 
-
 def main():
     num_groups=11
+    directory="/Graphs/Groups/"
+    graph_name="kmeans_energies_for_3features"
 
     #load json data - must give a file name, can also take another folder relative to the location of the current file that calls it in the directory
     prox_data=DataSet("proximity_graphs.json")
@@ -184,8 +154,13 @@ def main():
         group_data[i][1]=convo_data.get_group_energy(i+1)
         group_data[i][2]=atten_data.get_group_energy(i+1)
 
-    print(group_data)
-
+    # determine # of clusters
+    finder = OptimalClusterFinder(data=group_data, max_clusters=10, graph_name=graph_name,directory=directory)
+    finder.find_optimal_clusters()
+    optimal_clusters = finder.get_optimal_clusters()
+    print(f"")
+    finder.plot_combined_metrics()
+    
     # Tell computer to divide in these number of clusters 
     num_clusters = 3 # used elbow method(data). for our data it was good at 3 n_clusters ... maybe 4 is better? Check the graph. I feel like it's a small change 3, 4.
     #number of clusters breaks 4 even though i want to try 4
@@ -206,12 +181,14 @@ def main():
         roles[label].append(i+1)
 
     ### prints roles define by k cluster
+    print('\n'+graph_name)
     print(f'Role 1\tRole 2\tRole 3')#there is 3 if num_clusters=3
-    print(15 * "_")
+    print(22 * "_")
 
     for element in itertools.zip_longest(*roles):
         print(f'{element[0]}\t{element[1]}\t{element[2]}')#there is 3 if num_clusters=3
 
+    # this benchmark only works if cluster is less than 3 because it is comparing it with PCA-based method which has that constraint
     benchmarks(kmeans=kmeans, num_clusters=num_clusters, data=data, labels=labels)
 
     data=group_data
@@ -233,13 +210,13 @@ def main():
     # Plot centroids - center dots for clusters
     ax.scatter(centroids[:, 0], centroids[:, 1], centroids[:, 2], s=350, c='red', marker='X', label='Centroids')
 
-    ax.set_title('KMeans Clustering in 3 Feature with Energies')
+    ax.set_title('KMeans Clustering in 3 Feature with Group Energies')
     ax.set_xlabel('Prox Count') # feature 1 - aka ndarray col 0
     ax.set_ylabel('Talking Duration') # feature 2 - aka ndarray col 1
     ax.set_zlabel('Shared Atten Count') # feature 3 - aka ndarray col 2
     ax.legend()
 
-        ######## Plotting 2 feature of 3 feature Graph#####
+    ######## Plotting 2 feature of 3 feature Graph#####
     x_axis=1 #talking duration
     y_axis=2 #attention
     
@@ -305,19 +282,17 @@ def main():
     ax3.set_ylabel(f'Shared Attention')
     ax3.legend()
 
-
-    #must save before show
-    # graph_name="group_energies"
-    # path=os.getcwd() 
-    # path += "/Graphs/Groups/"
-    # path += graph_name +"_for_3features.png"
-    # plt.savefig(path)
-
     # Add Verticle Space Padding
     plt.subplots_adjust(hspace=0.5)
 
     # Space padding around fig
     plt.tight_layout(pad=2.0)
+
+    #must save before show
+    path=os.getcwd() 
+    path += directory
+    path += graph_name +".png"
+    plt.savefig(path)
 
     #show
     plt.show()
