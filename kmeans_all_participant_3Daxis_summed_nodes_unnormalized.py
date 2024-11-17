@@ -190,7 +190,7 @@ def main():
 
     ### prints roles define by k cluster
     print('\n'+graph_name)
-    print(f'Role 1\tRole 2\tRole 3\tRole 4')#there is 3 if num_clusters=3
+    print(f'Role 1\tRole 2\tRole 3\tRole 4')
     print(29 * "_")
 
     for element in itertools.zip_longest(*roles):
