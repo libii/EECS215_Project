@@ -1,3 +1,4 @@
+import os
 import csv
 from DataSet import DataSet #custom class
 
@@ -10,13 +11,13 @@ def load_csv(file_name:str, directory:str="Data/")->list:
     :param directory: Directory where file is stored.
         Return:
             CSV data as a list contain a list for rows. Each row represents a group."""
-    file_path="Data/"
-    file_path+=file_name
-    with open(file_path, 'r') as file:
-        csv_reader = csv.reader(file)
-        data = []
-        for row in csv_reader:
-            data.append(row)
+    if os.path.isfile(directory + file_name) and os.access(directory + file_name, os.R_OK):
+        file_path = directory + file_name
+        with open(file_path, 'r') as file:
+            csv_reader = csv.reader(file)
+            data = []
+            for row in csv_reader:
+                data.append(row)
     return data
 
 def clean_compeletion_csv(data:list)->tuple:
