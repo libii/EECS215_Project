@@ -119,7 +119,7 @@ def benchmarks(kmeans:str, num_clusters:int, data:np.ndarray, labels):
 
     print(80 * "_")
 
-def get_names(num_groups)->list:
+def get_names(num_groups:int)->list:
     """Made this so I can add names to the dots in the matplotlib charts.
     :returns: array of strings with names of each person [g#, letter], where g# is the group number and letter is the person in the group (person a, person b, person c, person d)"""
     
