@@ -76,7 +76,7 @@ def main():
     num_groups=11
     total_participants=num_groups*4
     directory="/Graphs/All_Participant/Summed_Nodes/"
-    graph_name="unnormalized_summed_nodes_of_for_2features"
+    graph_name="l1_normalized_summed_nodes_of_for_2features"
     
     #load json data - must give a file name, can also take another folder relative to the location of the current file that calls it in the directory
     prox_data=DataSet("proximity_graphs.json")
@@ -95,13 +95,23 @@ def main():
     x_axis=0 #proximity
     y_axis=1 #talking
     name_labels=get_names(num_groups=11)
+    no_norm_data_features=np.zeros((total_participants,data_sets))
 
 
     #Doing 2 Feature Kmeans for 3 combos of graphs
     for index, axis in enumerate(axises):
         for i in range(total_participants):
-            data_features[i][0]=features[axis[0]].get_sum_all_nodes()[i]
-            data_features[i][1]=features[axis[1]].get_sum_all_nodes()[i]
+            no_norm_data_features[i][0]=features[axis[0]].get_sum_all_nodes()[i]
+            no_norm_data_features[i][1]=features[axis[1]].get_sum_all_nodes()[i]
+        print("NOT NORMALIZED=========================")
+        print(no_norm_data_features)
+
+        for i in range(total_participants):
+            data_features[i][0]=features[axis[0]].get_sum_all_nodes_normalize(1)[i]
+            data_features[i][1]=features[axis[1]].get_sum_all_nodes_normalize(1)[i]
+
+        print("NORMALIZED=========================")
+        print(data_features)
 
         ###### Make K Means Model and Extract Features ##########
         data=data_features
@@ -115,8 +125,12 @@ def main():
         # print(f"")
         # finder.plot_combined_metrics()
 
-        if axis==(0,1):
+        if axis==(0,1): #prox/convo
             num_clusters=4
+        elif axis==(0,2): #prox/attention
+            num_clusters=3
+        elif axis==(1,2): #convo/atten
+            num_clusters=3
 
         # Create KMeans model and fit the data
         kmeans = KMeans(n_clusters=num_clusters, random_state=21) # seed at 21 because of forever 21
@@ -139,18 +153,18 @@ def main():
         ## prints roles define by k cluster
         print_name=graph_name + ":\n"+ axis_name[axis[0]] +" & "+axis_name[axis[1]]
         print(print_name)
-        if axis==(0,1):
-            print(f'Role 1\tRole 2\tRole 3\tRole 4')#there is 3 if num_clusters=3
-            print(29 * "_")
-            for element in itertools.zip_longest(*roles):
-                print(f'{element[0]}\t{element[1]}\t{element[2]}\t{element[3]}')#there is 3 if num_clusters=3
+        # if axis==(0,1):
+        #     print(f'Role 1\tRole 2\tRole 3\tRole 4')#there is 3 if num_clusters=3
+        #     print(29 * "_")
+        #     for element in itertools.zip_longest(*roles):
+        #         print(f'{element[0]}\t{element[1]}\t{element[2]}\t{element[3]}')#there is 3 if num_clusters=3
 
-        else:
-            print(f'Role 1\tRole 2\tRole 3')#there is 3 if num_clusters=3
-            print(22 * "_")
+        # else:
+        #     print(f'Role 1\tRole 2\tRole 3')#there is 3 if num_clusters=3
+        #     print(22 * "_")
 
-            for element in itertools.zip_longest(*roles):
-                print(f'{element[0]}\t{element[1]}\t{element[2]}')#there is 3 if num_clusters=3
+        #     for element in itertools.zip_longest(*roles):
+        #         print(f'{element[0]}\t{element[1]}\t{element[2]}')#there is 3 if num_clusters=3
 
         print("\n")
 

@@ -11,9 +11,10 @@ from sklearn.metrics import silhouette_score
 
 import matplotlib.pyplot as plt
 
+import os #for save
 
 class OptimalClusterFinder(object):
-    def __init__(self, data, max_clusters=10):
+    def __init__(self, data, max_clusters=10, graph_name="default", directory="/"):
         """
             Initializes the OptimalClusterFinder class.
         
@@ -25,6 +26,8 @@ class OptimalClusterFinder(object):
         self.max_clusters        = max_clusters
         self.inertia            = []
         self.silhouette_scores  = []
+        self.graph_name=graph_name
+        self.directory=directory
 
     def find_optimal_clusters(self):
         """
@@ -63,6 +66,7 @@ class OptimalClusterFinder(object):
         #Title and show the plot
         plt.title("Inertia and Silhouette Scores for optimal clustering")
         plt.tight_layout()
+        self.save_graph()
         plt.show()
 
     def plot_elbow_method(self):
@@ -92,6 +96,16 @@ class OptimalClusterFinder(object):
             Determines and prints the optimal number of clusters based on silhouette scores.
         """
         optimal_clusters = np.argmax(self.silhouette_scores) + 2 #adjust for 0-based index
+    
+    def save_graph(self):
+        """
+            Saves graph in directory and names the file.
+        """
+        path=os.getcwd() 
+        path += self.directory
+        path += self.graph_name+"_sillhoutte_score" +".png"
+        print(path)
+        plt.savefig(path)
 
 
 
@@ -100,15 +114,15 @@ def main2():
     total_participants=num_groups*4
 
     #loads csv data
-    compelition=clean_compeletion_csv(load_csv("completion_time_and_accuracy.csv"))
+    # compelition=clean_compeletion_csv(load_csv("completion_time_and_accuracy.csv"))
 
-    # print time of first group - note: first in the tuple
-    print(f"Time of first Group:\t\t{compelition[0][0]}\n")
-    #print(compelition[0][0])
+    # # print time of first group - note: first in the tuple
+    # print(f"Time of first Group:\t\t{compelition[0][0]}\n")
+    # #print(compelition[0][0])
 
-    # print accuracy of first group - note: seconds in the tuple
-    print(f"accuracy of first Group:\t{compelition[0][1]}\n")
-    #print(compelition[0][1])
+    # # print accuracy of first group - note: seconds in the tuple
+    # print(f"accuracy of first Group:\t{compelition[0][1]}\n")
+    # #print(compelition[0][1])
 
     #load json data - must give a file name, can also take another folder relative to the location of the current file that calls it in the directory
     convo_data=DataSet("conversation_graphs.json")
@@ -123,33 +137,33 @@ def main2():
     # prox_data.print_adj_matrix() # it's long
     
     # Gets numpy ajacency matrix from a group
-    print(f"Numpy Adjacency Matrix from Group:\n{prox_data.get_group_matrix(2)}\n")
+    # print(f"Numpy Adjacency Matrix from Group:\n{prox_data.get_group_matrix(2)}\n")
 
-    # calculate nodes of group and puts it in a list - order of participant: a, b, c, d
-    print(f"Calculates Nodes of group:\n{prox_data.get_sum_group_nodes(2)}\n")
+    # # calculate nodes of group and puts it in a list - order of participant: a, b, c, d
+    # print(f"Calculates Nodes of group:\n{prox_data.get_sum_group_nodes(2)}\n")
 
-    # calculate all nodes of dataset in a list - order by group number (and participant is ordered is a, b, c, d)
-    print(f"Calculated nodes of dataset; ordered [a,b,c,d]:\n" +
-        f"{prox_data.get_sum_all_nodes()}\n")
+    # # calculate all nodes of dataset in a list - order by group number (and participant is ordered is a, b, c, d)
+    # print(f"Calculated nodes of dataset; ordered [a,b,c,d]:\n" +
+    #     f"{prox_data.get_sum_all_nodes()}\n")
 
     #numpy array where data set is column and nodes are rows
     all_data=np.zeros((total_participants,3))
     for i in range(total_participants):
         all_data[i][0]=prox_data.get_sum_all_nodes()[i]
-        all_data[i][1]=convo_data.get_sum_all_nodes()[i]/3 # it's the same amount 3 times - can we divide by 3
+        all_data[i][1]=convo_data.get_sum_all_nodes()[i]
         all_data[i][2]=atten_data.get_sum_all_nodes()[i]
 
-    print(all_data) #it's long and gets converted to 64bit float which annoys me
+    # print(all_data) #it's long and gets converted to 64bit float which annoys me
 
     # To Think About: get some sort of average for conversation/proximity/shared attention divided by time from completion data (maybe I'm wrong)
     # To group members: to try stuff out on your own, maybe copy main.py as a templete since it loaded and transformt data
     #  rename your file so there aren't merge conflicts. Also, we should really talk to each other to figure out how to use kmeans
 
     # Eigenvalues
-    print(f"Eigenvalues:\n{np.linalg.eig(atten_data.list_adj_matrix[0]).eigenvalues}\n")
+    # print(f"Eigenvalues:\n{np.linalg.eig(atten_data.list_adj_matrix[0]).eigenvalues}\n")
 
-    #Eigenvector
-    print(f"Eigenvectors:\n{np.linalg.eig(atten_data.list_adj_matrix[0]).eigenvectors}\n")
+    # #Eigenvector
+    # print(f"Eigenvectors:\n{np.linalg.eig(atten_data.list_adj_matrix[0]).eigenvectors}\n")
 
     # AV-Cluster finder:
     finder = OptimalClusterFinder(data=all_data, max_clusters=10)

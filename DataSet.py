@@ -3,7 +3,9 @@ import json
 import argparse
 import re
 import numpy as np
+from scipy.sparse.csgraph import laplacian
 from pprint import pprint 
+
 
 #define softmax with np
 def softmax(x):
@@ -183,17 +185,69 @@ class DataSet:
 
         return energy
    
-    def get_group_imbalance(self, group_num:int):
-        #grab the eigen array of that group
-        eigen_vector = self.get_group_eigenvalue(group_num)
+    def get_group_laplacian_eigenvalue(self, group_num:int)->np.ndarray:
+        matrix=laplacian(self.get_group_matrix(group_num))
+        return np.linalg.eig(matrix).eigenvalues
 
-        #return the softmax of the vector, i am not sure if we need to transpose the vector, pls check the shape, i have this working for shape (n,1)
-        return softmax(eigen_vector)
 
-    def l2_normalize(self, group_num)->np.ndarray:
-        """Takes a group number L2 Normalization of the adjacency list
-        :param group_num: group number
+    def get_group_energy_laplacian(self, group_num:int):
+        #initialize energy
+        energy = 0
+
+        #get the group eigen values with the input as a np array
+        eigen_vector = self.get_group_laplacian_eigenvalue(group_num)
+
+        #sum of absolute values of eigen values
+        for eigen in eigen_vector:
+            energy += abs(eigen)
+
+        return energy
+
+    def _normalize_matrix(self, group_matrix:np.ndarray, type:int)->np.ndarray:
+        """Takes a group number L? Normalization of the adjacency list
+        :param group_matrix: (ndarray) matrix of one group
+        :param type: takes a number that indicates l1 or l2 normalization. 1=l1, 2=l2
         :returns: (str) matrix normalize with l2"""
-        group_matrix=self.get_group_matrix(group_num=group_num)
-        #compute l2 on each row
-        return group_matrix / np.linalg.norm(group_matrix, ord=1)
+
+        #this epislon is here to prevent divide by zero - smallest epislon for float64
+        #if you want to change the percision to float32 replace float 64 with it.
+        #compute l2 on each column
+        epsilon = np.finfo(np.float64).eps
+        if type == 2:
+            l2_norms = np.maximum(group_matrix, epsilon)
+            return group_matrix / (np.linalg.norm(l2_norms, axis=0))
+        
+        if type == 1:
+            #### By Column - it gave me all 1s after the sum wtf
+            l1_norms = np.sum(np.abs(group_matrix), axis=0)
+
+            #prevent divide by zero
+            l1_norms = np.maximum(l1_norms, epsilon)
+
+            return group_matrix / l1_norms
+
+            #### By Row - feels wrong, worth a shot
+            # l1_norm_rows = np.sum(np.abs(group_matrix), axis=1)
+
+            # return group_matrix / l1_norm_rows[:, np.newaxis]  # Use broadcasting for row-wise division
+
+        
+        #if you made it here you messed up
+        return None
+    
+    def get_sum_all_nodes_normalize(self, num:int):
+        """
+        Returns a 1-dimensional vector of sums of normalized edges for all nodes.
+        """
+        all_nodes = []
+        
+        # Iterate over each node's adjacency list
+        for adj_matrix in self.list_adj_matrix:  # Check if 11 is the correct number of iterations
+            norm_adj = self._normalize_matrix(adj_matrix, num)  # Normalize adjacency matrix
+            for row in norm_adj:
+                #sum all the rows
+                all_nodes.append(row.sum())# Append the sum for the current node
+        
+        # Return all nodes as a 1D list (flattened vector)
+        return all_nodes
+
