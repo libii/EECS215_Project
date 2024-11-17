@@ -573,109 +573,49 @@
                 {
                     "source": "A",
                     "target": "B",
-                    "directed": true,
                     "relation": "speaking_duration",
                     "metadata": {
-                        "weight": 54.69
+                        "weight": 38.744
                     }
                 },
                 {
                     "source": "A",
                     "target": "C",
-                    "directed": true,
                     "relation": "speaking_duration",
                     "metadata": {
-                        "weight": 54.69
+                        "weight": 55.509
                     }
                 },
                 {
                     "source": "A",
                     "target": "D",
-                    "directed": true,
                     "relation": "speaking_duration",
                     "metadata": {
-                        "weight": 54.69
-                    }
-                },
-                {
-                    "source": "B",
-                    "target": "A",
-                    "directed": true,
-                    "relation": "speaking_duration",
-                    "metadata": {
-                        "weight": 22.798000000000002
+                        "weight": 126.52
                     }
                 },
                 {
                     "source": "B",
                     "target": "C",
-                    "directed": true,
                     "relation": "speaking_duration",
                     "metadata": {
-                        "weight": 22.798000000000002
+                        "weight": 39.563
                     }
                 },
                 {
                     "source": "B",
                     "target": "D",
-                    "directed": true,
                     "relation": "speaking_duration",
                     "metadata": {
-                        "weight": 22.798000000000002
-                    }
-                },
-                {
-                    "source": "C",
-                    "target": "A",
-                    "directed": true,
-                    "relation": "speaking_duration",
-                    "metadata": {
-                        "weight": 56.328
-                    }
-                },
-                {
-                    "source": "C",
-                    "target": "B",
-                    "directed": true,
-                    "relation": "speaking_duration",
-                    "metadata": {
-                        "weight": 56.328
+                        "weight": 110.574
                     }
                 },
                 {
                     "source": "C",
                     "target": "D",
-                    "directed": true,
                     "relation": "speaking_duration",
                     "metadata": {
-                        "weight": 56.328
-                    }
-                },
-                {
-                    "source": "D",
-                    "target": "A",
-                    "directed": true,
-                    "relation": "speaking_duration",
-                    "metadata": {
-                        "weight": 198.35
-                    }
-                },
-                {
-                    "source": "D",
-                    "target": "B",
-                    "directed": true,
-                    "relation": "speaking_duration",
-                    "metadata": {
-                        "weight": 198.35
-                    }
-                },
-                {
-                    "source": "D",
-                    "target": "C",
-                    "directed": true,
-                    "relation": "speaking_duration",
-                    "metadata": {
-                        "weight": 198.35
+                        "weight": 127.339
                     }
                 }
             ]
@@ -703,109 +643,49 @@
                 {
                     "source": "A",
                     "target": "B",
-                    "directed": true,
                     "relation": "speaking_duration",
                     "metadata": {
-                        "weight": 3.257
+                        "weight": 8.6825
                     }
                 },
                 {
                     "source": "A",
                     "target": "C",
-                    "directed": true,
                     "relation": "speaking_duration",
                     "metadata": {
-                        "weight": 3.257
+                        "weight": 12.8845
                     }
                 },
                 {
                     "source": "A",
                     "target": "D",
-                    "directed": true,
                     "relation": "speaking_duration",
                     "metadata": {
-                        "weight": 3.257
-                    }
-                },
-                {
-                    "source": "B",
-                    "target": "A",
-                    "directed": true,
-                    "relation": "speaking_duration",
-                    "metadata": {
-                        "weight": 14.108
+                        "weight": 32.9655
                     }
                 },
                 {
                     "source": "B",
                     "target": "C",
-                    "directed": true,
                     "relation": "speaking_duration",
                     "metadata": {
-                        "weight": 14.108
+                        "weight": 18.31
                     }
                 },
                 {
                     "source": "B",
                     "target": "D",
-                    "directed": true,
                     "relation": "speaking_duration",
                     "metadata": {
-                        "weight": 14.108
-                    }
-                },
-                {
-                    "source": "C",
-                    "target": "A",
-                    "directed": true,
-                    "relation": "speaking_duration",
-                    "metadata": {
-                        "weight": 22.512
-                    }
-                },
-                {
-                    "source": "C",
-                    "target": "B",
-                    "directed": true,
-                    "relation": "speaking_duration",
-                    "metadata": {
-                        "weight": 22.512
+                        "weight": 38.391
                     }
                 },
                 {
                     "source": "C",
                     "target": "D",
-                    "directed": true,
                     "relation": "speaking_duration",
                     "metadata": {
-                        "weight": 22.512
-                    }
-                },
-                {
-                    "source": "D",
-                    "target": "A",
-                    "directed": true,
-                    "relation": "speaking_duration",
-                    "metadata": {
-                        "weight": 62.674
-                    }
-                },
-                {
-                    "source": "D",
-                    "target": "B",
-                    "directed": true,
-                    "relation": "speaking_duration",
-                    "metadata": {
-                        "weight": 62.674
-                    }
-                },
-                {
-                    "source": "D",
-                    "target": "C",
-                    "directed": true,
-                    "relation": "speaking_duration",
-                    "metadata": {
-                        "weight": 62.674
+                        "weight": 42.593
                     }
                 }
             ]
@@ -833,109 +713,49 @@
                 {
                     "source": "A",
                     "target": "B",
-                    "directed": true,
                     "relation": "speaking_duration",
                     "metadata": {
-                        "weight": 41.293
+                        "weight": 129.4615
                     }
                 },
                 {
                     "source": "A",
                     "target": "C",
-                    "directed": true,
                     "relation": "speaking_duration",
                     "metadata": {
-                        "weight": 41.293
+                        "weight": 32.5515
                     }
                 },
                 {
                     "source": "A",
                     "target": "D",
-                    "directed": true,
                     "relation": "speaking_duration",
                     "metadata": {
-                        "weight": 41.293
-                    }
-                },
-                {
-                    "source": "B",
-                    "target": "A",
-                    "directed": true,
-                    "relation": "speaking_duration",
-                    "metadata": {
-                        "weight": 217.63
+                        "weight": 65.2215
                     }
                 },
                 {
                     "source": "B",
                     "target": "C",
-                    "directed": true,
                     "relation": "speaking_duration",
                     "metadata": {
-                        "weight": 217.63
+                        "weight": 120.72
                     }
                 },
                 {
                     "source": "B",
                     "target": "D",
-                    "directed": true,
                     "relation": "speaking_duration",
                     "metadata": {
-                        "weight": 217.63
-                    }
-                },
-                {
-                    "source": "C",
-                    "target": "A",
-                    "directed": true,
-                    "relation": "speaking_duration",
-                    "metadata": {
-                        "weight": 23.81
-                    }
-                },
-                {
-                    "source": "C",
-                    "target": "B",
-                    "directed": true,
-                    "relation": "speaking_duration",
-                    "metadata": {
-                        "weight": 23.81
+                        "weight": 153.39
                     }
                 },
                 {
                     "source": "C",
                     "target": "D",
-                    "directed": true,
                     "relation": "speaking_duration",
                     "metadata": {
-                        "weight": 23.81
-                    }
-                },
-                {
-                    "source": "D",
-                    "target": "A",
-                    "directed": true,
-                    "relation": "speaking_duration",
-                    "metadata": {
-                        "weight": 89.15
-                    }
-                },
-                {
-                    "source": "D",
-                    "target": "B",
-                    "directed": true,
-                    "relation": "speaking_duration",
-                    "metadata": {
-                        "weight": 89.15
-                    }
-                },
-                {
-                    "source": "D",
-                    "target": "C",
-                    "directed": true,
-                    "relation": "speaking_duration",
-                    "metadata": {
-                        "weight": 89.15
+                        "weight": 56.48
                     }
                 }
             ]
@@ -963,109 +783,49 @@
                 {
                     "source": "A",
                     "target": "B",
-                    "directed": true,
                     "relation": "speaking_duration",
                     "metadata": {
-                        "weight": 22.815
+                        "weight": 34.948
                     }
                 },
                 {
                     "source": "A",
                     "target": "C",
-                    "directed": true,
                     "relation": "speaking_duration",
                     "metadata": {
-                        "weight": 22.815
+                        "weight": 86.3655
                     }
                 },
                 {
                     "source": "A",
                     "target": "D",
-                    "directed": true,
                     "relation": "speaking_duration",
                     "metadata": {
-                        "weight": 22.815
-                    }
-                },
-                {
-                    "source": "B",
-                    "target": "A",
-                    "directed": true,
-                    "relation": "speaking_duration",
-                    "metadata": {
-                        "weight": 47.080999999999996
+                        "weight": 26.7975
                     }
                 },
                 {
                     "source": "B",
                     "target": "C",
-                    "directed": true,
                     "relation": "speaking_duration",
                     "metadata": {
-                        "weight": 47.080999999999996
+                        "weight": 98.4985
                     }
                 },
                 {
                     "source": "B",
                     "target": "D",
-                    "directed": true,
                     "relation": "speaking_duration",
                     "metadata": {
-                        "weight": 47.080999999999996
-                    }
-                },
-                {
-                    "source": "C",
-                    "target": "A",
-                    "directed": true,
-                    "relation": "speaking_duration",
-                    "metadata": {
-                        "weight": 149.916
-                    }
-                },
-                {
-                    "source": "C",
-                    "target": "B",
-                    "directed": true,
-                    "relation": "speaking_duration",
-                    "metadata": {
-                        "weight": 149.916
+                        "weight": 38.9305
                     }
                 },
                 {
                     "source": "C",
                     "target": "D",
-                    "directed": true,
                     "relation": "speaking_duration",
                     "metadata": {
-                        "weight": 149.916
-                    }
-                },
-                {
-                    "source": "D",
-                    "target": "A",
-                    "directed": true,
-                    "relation": "speaking_duration",
-                    "metadata": {
-                        "weight": 30.78
-                    }
-                },
-                {
-                    "source": "D",
-                    "target": "B",
-                    "directed": true,
-                    "relation": "speaking_duration",
-                    "metadata": {
-                        "weight": 30.78
-                    }
-                },
-                {
-                    "source": "D",
-                    "target": "C",
-                    "directed": true,
-                    "relation": "speaking_duration",
-                    "metadata": {
-                        "weight": 30.78
+                        "weight": 90.348
                     }
                 }
             ]
