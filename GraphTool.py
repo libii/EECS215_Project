@@ -1,3 +1,4 @@
+from statistics import LinearRegression
 from DataSet        import DataSet #custom class
 from main           import load_csv, clean_compeletion_csv, map_label_participant, stub
 from kmeans_eigenvalues		import kmeans_eigenvalues
@@ -5,26 +6,23 @@ from OptimalClusterFinder	import OptimalClusterFinder
 from kmeans_all_participant_3Daxis_summed_nodes_normalized import main as all_l2Norm_main, get_names, benchmarks, bench_k_means
 
 #kmeans
-from sklearn.cluster import KMeans #sci-kit learn
-from mpl_toolkits.mplot3d import Axes3D #3D MatPlotLib - if you have matplotlib, you have this
-from sklearn.metrics import silhouette_samples
+from sklearn.cluster		import KMeans #sci-kit learn
 
 #benchmark tutorial
-from time import time
-from sklearn import metrics
-from sklearn.pipeline import make_pipeline
-from sklearn.preprocessing import StandardScaler
-from sklearn.cluster import KMeans
-from sklearn.decomposition import PCA
+from sklearn.pipeline		import make_pipeline
+from sklearn.preprocessing	import StandardScaler
+from sklearn.cluster		import KMeans
+from sklearn.decomposition	import PCA
+from sklearn.linear_model	import LinearRegression
+from sklearn.metrics		import r2_score
 
 
 import numpy				as np
 import matplotlib.pyplot	as plt
-import itertools
 
 
 
-class GraphTool(object):
+class RoleGraph(object):
 	def __init__(self,all_data,n_clusters,num_groups=11):
 		self.all_data		=  all_data
 		self.name_labels	= get_names(num_groups)
@@ -115,6 +113,57 @@ class GraphTool(object):
 		return grid_mapping
 
 
+class ScatterMetricVsAccuracy:
+	def __init__(self, data, data_accuracy):
+		"""
+			Initialize the class with data and accuracy values.
+			:param data: A 2D NumPy array where each row represents a data point.
+			:param accuracy_data: A list of tuples where each tuple is (time, accuracy).
+        """
+		self.data = data
+		self.time, self.accuracy = zip(*data_accuracy) #unpack time and accuracy
+		self.model = None
+
+	def regression_plot(self):
+		"""
+		Create a scatter plot with a regression plot
+		"""
+		num_columns = self.data.shape[1]
+		colors = ['blue', 'green', 'orange', 'purple', 'red']  # Define colors for each column
+		plt.figure(figsize=(10, 6))
+
+		for i in range(num_columns):
+			# Extract column data
+			x = self.data[:, i]
+			y = self.accuracy
+
+			# Scatter plot for this column
+			plt.scatter(x, y, color=colors[i % len(colors)], label=f"Column {i + 1} Data")
+
+			# Fit a regression line
+			model = LinearRegression()
+			x_reshaped = x.reshape(-1, 1)
+			model.fit(x_reshaped, y)
+			predicted = model.predict(x_reshaped)
+
+			# Plot regression line
+			plt.plot(x, predicted, color=colors[i % len(colors)], linestyle='--', label=f"Column {i + 1} Regression\n$R^2 = {r2_score(y, predicted):.2f}$")
+
+			# Add regression equation
+			intercept = model.intercept_
+			slope = model.coef_[0]
+			equation_text = f"$y = {slope:.2f}x + {intercept:.2f}$"
+			plt.text(5, np.max(y) - i * 2, equation_text, fontsize=10, color=colors[i % len(colors)])
+
+		# Labels, legend, and grid
+		plt.xlabel("X Values (Columns of Data)")
+		plt.ylabel("Accuracy")
+		plt.title("Scatter Plot of Columns with Regression Lines")
+		plt.legend()
+		#plt.legend(loc="center left", bbox_to_anchor=(0, 0.2))
+		plt.grid(True)
+		plt.show()
+
 def main_graph_tool():
 	print("getting Graphs")
 	
@@ -159,9 +208,20 @@ def main_graph_tool():
 		all_data[i][1] = prox_data_norm[i]
 		all_data[i][2] = atten_data_norm[i]
 	
-	visualizer = GraphTool(all_data,n_clusters=3,num_groups=11)
-	visualizer.plot_roles()
 
+	# row is person, col is data sets
+	group_energy_data=np.zeros((num_groups, 3))
+	for i in range(num_groups):
+		group_energy_data[i][0]=prox_data.get_group_energy_laplacian(i+1)
+		group_energy_data[i][1]=convo_data.get_group_energy_laplacian(i+1)
+		group_energy_data[i][2]=atten_data.get_group_energy_laplacian(i+1)
+
+	print(group_energy_data)
+	#visializer = RoleGraph(all_data,3)
+	#visializer.plot_roles()
+
+	plotter = ScatterMetricVsAccuracy(group_energy_data, compelition)
+	plotter.regression_plot()
 
 if __name__ == "__main__":
 	main_graph_tool()
