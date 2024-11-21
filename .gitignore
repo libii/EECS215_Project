@@ -3,3 +3,5 @@ __pycache__
 .vs/*
 .DS_Store
 /Graphs/All_Participant/Summed_Nodes/new_normalized_summed_nodes_of_for_3features.png
+/Graphs/Groups/kmeans_laplacian_energies_for_3features.png
+/Graphs/Groups/kmeans_laplacian_energies_for_3features_sillhoutte_score.png
