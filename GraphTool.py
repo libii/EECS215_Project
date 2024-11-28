@@ -23,8 +23,9 @@ import matplotlib.pyplot	as plt
 
 
 class RoleGraph(object):
-	def __init__(self,all_data,n_clusters,num_groups=11):
+	def __init__(self,all_data,n_clusters, data_accuracy,num_groups=11):
 		self.all_data		=  all_data
+		self.time, self.accuracy = zip(*data_accuracy) #unpack time and accuracy
 		self.name_labels	= get_names(num_groups)
 		self.n_clusters		= n_clusters
 		self.kmeans			= None
@@ -67,13 +68,23 @@ class RoleGraph(object):
 				ax.add_patch(plt.Rectangle((col - 0.5, adjusted_row - 0.5), 1, 1, color=color, edgecolor="black"))
 				ax.text(col, adjusted_row, role, ha="center", va="center", fontsize=10, color="white")
 
+		#add in accuracy Col
+		for i in range(0, len(self.accuracy)):
+			ax.add_patch(plt.Rectangle((5 - 0.5, i - 0.5), 1, 1, color="purple", edgecolor="black"))
+			ax.text(5, i, round(self.accuracy[i],2) , ha="center", va="center", fontsize=10, color="white")
+
+		#add in Time column
+		for i in range(0, len(self.time)):
+			ax.add_patch(plt.Rectangle((6 - 0.5, i - 0.5), 1, 1, color="red", edgecolor="black"))
+			ax.text(6, i, round(self.time[i]/60,2) , ha="center", va="center", fontsize=10, color="white")
+
 		# Set grid limits
-		max_row = max(pos[0] for positions in self.grid_mapping.values() for pos in positions)
-		max_col = max(pos[1] for positions in self.grid_mapping.values() for pos in positions)
-		ax.set_xlim(0.5, max_col + 0.5)
+		max_row = max(pos[0] for positions in self.grid_mapping.values() for pos in positions) 
+		max_col = max(pos[1] for positions in self.grid_mapping.values() for pos in positions) + 1
+		ax.set_xlim(0.5, max_col + 0.5 + 1)
 		ax.set_ylim(-0.5, max_row - 0.5)
-		ax.set_xticks(range(1, max_col + 1))
-		ax.set_yticks(range(max_row))
+		ax.set_xticks(range(1, max_col + 1+1))
+		ax.set_yticks(range(1, max_row))
 		ax.invert_yaxis()  # Invert y-axis to make row 1 appear at the top
 		plt.grid(False)
 		plt.title("Roles among groups")
@@ -90,7 +101,7 @@ class RoleGraph(object):
 		roles	= {name: cluster for name, cluster in zip(self.name_labels, self.labels)}
 		return roles
 
-	def map_to_grid(self):
+	def map_to_grid(self) -> dict:
 		"""
 			Maps dictionary values like '8a' to grid positions.
 			Row is determined by the digit, and column by the letter's alphabetical position.
@@ -135,19 +146,20 @@ class ScatterMetricVsAccuracy:
 		for i in range(num_columns):
 			# Extract column data
 			x = self.data[:, i]
-			y = self.accuracy
+			y = self.time
+			data_labels = ['Conversation', 'Proximity', 'Attention']
 
 			# Scatter plot for this column
-			plt.scatter(x, y, color=colors[i % len(colors)], label=f"Column {i + 1} Data")
+			plt.scatter(x, y, color=colors[i % len(colors)], label=f"{data_labels[i]} Data")
 
 			# Fit a regression line
 			model = LinearRegression()
 			x_reshaped = x.reshape(-1, 1)
 			model.fit(x_reshaped, y)
-			predicted = model.predict(x_reshaped)
+			predicted = model.predict(x_reshaped)			
 
 			# Plot regression line
-			plt.plot(x, predicted, color=colors[i % len(colors)], linestyle='--', label=f"Column {i + 1} Regression\n$R^2 = {r2_score(y, predicted):.2f}$")
+			plt.plot(x, predicted, color=colors[i % len(colors)], linestyle='--', label=f"{data_labels[i]} Regression\n$R^2 = {r2_score(y, predicted):.2f}$")
 
 			# Add regression equation
 			intercept = model.intercept_
@@ -156,9 +168,9 @@ class ScatterMetricVsAccuracy:
 			plt.text(5, np.max(y) - i * 2, equation_text, fontsize=10, color=colors[i % len(colors)])
 
 		# Labels, legend, and grid
-		plt.xlabel("X Values (Columns of Data)")
-		plt.ylabel("Accuracy")
-		plt.title("Scatter Plot of Columns with Regression Lines")
+		plt.xlabel("Eigen Value Engergy of Group")
+		plt.ylabel("Time (sec)")
+		plt.title("Eigen Values vs Group Time")
 		plt.legend()
 		#plt.legend(loc="center left", bbox_to_anchor=(0, 0.2))
 		plt.grid(True)
@@ -216,9 +228,13 @@ def main_graph_tool():
 		group_energy_data[i][1]=convo_data.get_group_energy_laplacian(i+1)
 		group_energy_data[i][2]=atten_data.get_group_energy_laplacian(i+1)
 
+	#df_eigen = pd.DataFrame(group_energy_data)
+
 	print(group_energy_data)
-	#visializer = RoleGraph(all_data,3)
-	#visializer.plot_roles()
+	print(compelition)
+	
+	visializer = RoleGraph(all_data,3, compelition)
+	visializer.plot_roles()
 
 	plotter = ScatterMetricVsAccuracy(group_energy_data, compelition)
 	plotter.regression_plot()

@@ -176,9 +176,9 @@ def main():
     all_data=np.zeros((total_participants,data_sets))
     for i in range(total_participants):
         # these are counts or duration / seconds.##..
-        all_data[i][0]=prox_data.get_sum_all_nodes()[i]/compelition[(i//4)][0]
-        all_data[i][1]=(convo_data.get_sum_all_nodes()[i]/3)/compelition[(i//4)][0] # when it was summed it was just 3 values repeated
-        all_data[i][2]=atten_data.get_sum_all_nodes()[i]/compelition[(i//4)][0]
+        all_data[i][0]=prox_data.get_sum_all_nodes_normalize(2)[i]#/compelition[(i//4)][0]
+        all_data[i][1]=convo_data.get_sum_all_nodes_normalize(2)[i]#/3)/compelition[(i//4)][0] # when it was summed it was just 3 values repeated
+        all_data[i][2]=atten_data.get_sum_all_nodes_normalize(2)[i]#/compelition[(i//4)][0]
 
     # Kmeans Attempt
     ### Elbow Method #### - https://www.codecademy.com/learn/dspath-unsupervised/modules/dspath-clustering/cheatsheet (first figure)
