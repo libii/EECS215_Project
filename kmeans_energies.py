@@ -22,6 +22,8 @@ from sklearn.decomposition import PCA
 #save
 import os
 
+from pprint import pprint 
+
 def load_csv(file_name:str, directory:str="Data/")->list:
     """Load CSV from Data directory.
     :param file_name: Filename
@@ -141,9 +143,9 @@ def main():
     graph_name="kmeans_energies_for_3features"
 
     #load json data - must give a file name, can also take another folder relative to the location of the current file that calls it in the directory
-    prox_data=DataSet("proximity_graphs.json")
-    convo_data=DataSet("conversation_graphs.json")
-    atten_data=DataSet("shared_attention_graphs.json")
+    prox_data=DataSet("proximity_graphs.json", directed=False)
+    convo_data=DataSet("conversation_graphs.json", directed=True)
+    atten_data=DataSet("shared_attention_graphs.json", directed=True)
 
     data_sets=3
     # row is person, col is data sets
@@ -155,19 +157,21 @@ def main():
         group_data[i][1]=convo_data.get_group_energy(i+1)
         group_data[i][2]=atten_data.get_group_energy(i+1)
 
+
+
     # determine # of clusters
-    finder = OptimalClusterFinder(data=group_data, max_clusters=10, graph_name=graph_name,directory=directory)
-    finder.find_optimal_clusters()
-    optimal_clusters = finder.get_optimal_clusters()
-    print(f"")
-    finder.plot_combined_metrics()
+    # finder = OptimalClusterFinder(data=group_data, max_clusters=10, graph_name=graph_name,directory=directory)
+    # finder.find_optimal_clusters()
+    # optimal_clusters = finder.get_optimal_clusters()
+    # print(f"")
+    # finder.plot_combined_metrics()
     
     # Tell computer to divide in these number of clusters 
     num_clusters = 3 # used elbow method(data). for our data it was good at 3 n_clusters ... maybe 4 is better? Check the graph. I feel like it's a small change 3, 4.
     #number of clusters breaks 4 even though i want to try 4
     data=group_data
 
-    print(data)
+    # print(data)
 
     # Create KMeans model and fit the data
     kmeans = KMeans(n_clusters=num_clusters, random_state=21) # seed at 21 because of forever 21
@@ -181,12 +185,12 @@ def main():
     silhouette_scores = silhouette_samples(data, labels)
 
     # Print silhouette scores
-    for i, score in enumerate(silhouette_scores):
-        if i % 4 == 0:
-            p=4
-        else:
-            p=i%4
-        print(f"Group {i+1}: Silhouette Score = {score:.3f}")
+    # for i, score in enumerate(silhouette_scores):
+    #     if i % 4 == 0:
+    #         p=4
+    #     else:
+    #         p=i%4
+    #     print(f"Group {i+1}: Silhouette Score = {score:.3f}")
 
 
     roles=[[] for _ in range(num_clusters)] # 3 if 3 labels, 4 if 4 labels. undecided
@@ -208,7 +212,7 @@ def main():
         print(f'{element[0]}\t{element[1]}\t{element[2]}')#there is 3 if num_clusters=3
 
     # this benchmark only works if cluster is less than 3 because it is comparing it with PCA-based method which has that constraint
-    benchmarks(kmeans=kmeans, num_clusters=num_clusters, data=data, labels=labels)
+    # benchmarks(kmeans=kmeans, num_clusters=num_clusters, data=data, labels=labels)
 
     data=group_data
     ####### Plotting - 3 Features ######
@@ -251,7 +255,6 @@ def main():
 
     # Plot centroids - center dots for clusters
     ax1.scatter(centroids[:, x_axis], centroids[:, y_axis], s=350, c='red', marker='X', label='Centroids')
-
 
     ax1.set_title("Talking and Attention")
     ax1.set_xlabel(f'Talking Duration')
@@ -314,7 +317,7 @@ def main():
     plt.savefig(path)
 
     #show
-    plt.show()
+    # plt.show()
 
 
 if __name__ == "__main__":

@@ -15,7 +15,7 @@ def softmax(x):
 
 class DataSet:
     "created a data set from a json"
-    def __init__(self, file_name:str, directory:str="Data/"):
+    def __init__(self, file_name:str, directory:str="Data/", directed:bool=False):
         """
         Contructs from a string of the name of a json file. Can add a directory but the default is Data/
         
@@ -31,6 +31,7 @@ class DataSet:
         """a list of numpy arrays that are adjacency lists"""
         self.load()
         self._json_to_adj_list()
+        self.directed=directed
 
     def _extract_group_number(self, graph: str)->int:
         """Accepts a graph from JSON and determines by the group name as a number extracted from the "id" field - Credit: Diana
@@ -172,6 +173,10 @@ class DataSet:
         matrix=self.get_group_matrix(group_num)
         return np.linalg.eig(matrix).eigenvalues
 
+    def get_group_eigenvalue_l2norm(self, group_num:int)->np.ndarray:
+        matrix=self._normalize_matrix(self.get_group_matrix(group_num),2)
+        return np.linalg.eig(matrix).eigenvalues
+
     def get_group_energy(self, group_num:int):
         #initialize energy
         energy = 0
@@ -185,33 +190,83 @@ class DataSet:
             energy += abs(eigen)
 
         return energy
+    
    
     def get_group_laplacian_eigenvalue(self, group_num:int)->np.ndarray:
         matrix=laplacian(self.get_group_matrix(group_num))
         return np.linalg.eig(matrix).eigenvalues
 
     def get_group_laplacian_eigenvalue_normed(self, group_num:int)->np.ndarray:
-        matrix=laplacian(self.get_group_matrix(group_num), normed=True)
+        if self.directed:
+            matrix=laplacian(self.get_group_matrix(group_num), normed=True)
+        else:
+            print(self._name)
+            matrix=laplacian(self.get_group_matrix(group_num), normed=True, symmetrized=True)
         return np.linalg.eig(matrix).eigenvalues
 
     def get_group_laplacian_eigenvalue_normed_l2(self, group_num:int)->np.ndarray:
         matrix=laplacian(self._normalize_matrix(self.get_group_matrix(group_num),2))
         return np.linalg.eig(matrix).eigenvalues
 
+    def get_group_laplacian_energy(self, group_num: int):
+        # initialize energy
+        energy = 0
+
+        # get the group eigenvalues with the input as a np array
+        eigen_vector = self.get_group_laplacian_eigenvalue_normed(group_num)
+
+        #fix this
+        if self.directed:   
+            group_adj_matrix = laplacian(self.get_group_matrix(group_num), normed=True)
+        else:
+            group_adj_matrix = laplacian(self.get_group_matrix(group_num), normed=True, symmetrized=True)
+        ##comeback here
+
+        in_degrees = np.sum(group_adj_matrix, axis=0)  # Sum along columns
+        out_degrees = np.sum(group_adj_matrix, axis=1)  # Sum along rows
+
+        #total degree per node
+        total_degrees = in_degrees + out_degrees
+
+        num_nodes = group_adj_matrix.shape[0]
+
+        average_degree = np.sum(total_degrees) / num_nodes
+
+        # return energy
+        # return np.sum(np.pow((eigen_vector - average_degree), 2))
+        return np.sum(abs(eigen_vector - average_degree))
+
+        # def get_group_energy_laplacian(self, group_num:int):
+        #     #initialize energy
+        #     energy = 0
+
+        #     #get the group eigen values with the input as a np array
+        #     # eigen_vector = self.get_group_laplacian_eigenvalue_normed_l2(group_num) #changed
+        #     # eigen_vector = self.get_group_laplacian_eigenvalue_normed(group_num)
+        #     eigen_vector = self.get_group_laplacian_eigenvalue(group_num)
+
+        #     #sum of absolute values of eigen values
+        #     for eigen in eigen_vector:
+        #         energy += abs(eigen)
+
+        #     return energy
+
     def get_group_energy_laplacian(self, group_num:int):
         #initialize energy
         energy = 0
 
         #get the group eigen values with the input as a np array
-        eigen_vector = self.get_group_laplacian_eigenvalue_normed_l2(group_num)
+        eigen_vector = self.get_group_laplacian_eigenvalue_normed(group_num)
 
-        #sum of absolute values of eigen values
-        for eigen in eigen_vector:
-            energy += abs(eigen)
+        lambda_mean = np.mean(eigen_vector)
+        
+        # for eigen in eigen_vector:
+        #     energy += (lambda_i - eigen_vector[eigen])**2
 
-        return energy
+        # return energy
+        return np.sum(np.pow((eigen_vector - lambda_mean), 2))
 
-    def _normalize_matrix(self, group_matrix:np.ndarray, type:int)->np.ndarray:
+    def _normalize_matrix(se1lf, group_matrix:np.ndarray, type:int)->np.ndarray:
         """Takes a group number L? Normalization of the adjacency list
         :param group_matrix: (ndarray) matrix of one group
         :param type: takes a number that indicates l1 or l2 normalization. 1=l1, 2=l2

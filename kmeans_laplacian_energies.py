@@ -141,9 +141,9 @@ def main():
     graph_name="kmeans_laplacian_energies_for_3features"
 
     #load json data - must give a file name, can also take another folder relative to the location of the current file that calls it in the directory
-    prox_data=DataSet("proximity_graphs.json")
-    convo_data=DataSet("conversation_graphs.json")
-    atten_data=DataSet("shared_attention_graphs.json")
+    prox_data=DataSet("proximity_graphs.json", directed=False)
+    convo_data=DataSet("conversation_graphs.json", directed=True)
+    atten_data=DataSet("shared_attention_graphs.json", directed=False)
 
     data_sets=3
     # row is person, col is data sets
@@ -151,16 +151,16 @@ def main():
 
     #create group data of energies
     for i in range(num_groups):
-        group_data[i][0]=prox_data.get_group_energy_laplacian(i+1)
-        group_data[i][1]=convo_data.get_group_energy_laplacian(i+1)
-        group_data[i][2]=atten_data.get_group_energy_laplacian(i+1)
+        group_data[i][0]=prox_data.get_group_laplacian_energy(i+1)
+        group_data[i][1]=convo_data.get_group_laplacian_energy(i+1)
+        group_data[i][2]=atten_data.get_group_laplacian_energy(i+1)
 
     # determine # of clusters
-    finder = OptimalClusterFinder(data=group_data, max_clusters=10, graph_name=graph_name,directory=directory)
-    finder.find_optimal_clusters()
-    optimal_clusters = finder.get_optimal_clusters()
-    print(f"")
-    finder.plot_combined_metrics()
+    # finder = OptimalClusterFinder(data=group_data, max_clusters=10, graph_name=graph_name,directory=directory)
+    # finder.find_optimal_clusters()
+    # optimal_clusters = finder.get_optimal_clusters()
+    # print(f"")
+    # finder.plot_combined_metrics()
     
     # Tell computer to divide in these number of clusters 
     num_clusters = 3 # used elbow method(data). for our data it was good at 3 n_clusters ... maybe 4 is better? Check the graph. I feel like it's a small change 3, 4.
@@ -168,6 +168,7 @@ def main():
     data=group_data
 
     print(data)
+
 
     # Create KMeans model and fit the data
     kmeans = KMeans(n_clusters=num_clusters, random_state=21) # seed at 21 because of forever 21
@@ -181,12 +182,12 @@ def main():
     silhouette_scores = silhouette_samples(data, labels)
 
     # Print silhouette scores
-    for i, score in enumerate(silhouette_scores):
-        if i % 4 == 0:
-            p=4
-        else:
-            p=i%4
-        print(f"Group {i+1}: Silhouette Score = {score}")
+    # for i, score in enumerate(silhouette_scores):
+    #     if i % 4 == 0:
+    #         p=4
+    #     else:
+    #         p=i%4
+    #     # print(f"Group {i+1}: Silhouette Score = {score:.3f}")
 
     roles=[[] for _ in range(num_clusters)] # 3 if 3 labels, 4 if 4 labels. undecided
     p=None
@@ -207,7 +208,7 @@ def main():
         print(f'{element[0]}\t{element[1]}\t{element[2]}')#there is 3 if num_clusters=3
 
     # this benchmark only works if cluster is less than 3 because it is comparing it with PCA-based method which has that constraint
-    benchmarks(kmeans=kmeans, num_clusters=num_clusters, data=data, labels=labels)
+    # benchmarks(kmeans=kmeans, num_clusters=num_clusters, data=data, labels=labels)
 
     data=group_data
     ####### Plotting - 3 Features ######
@@ -228,7 +229,7 @@ def main():
     # Plot centroids - center dots for clusters
     ax.scatter(centroids[:, 0], centroids[:, 1], centroids[:, 2], s=350, c='red', marker='X', label='Centroids')
 
-    ax.set_title('KMeans Clustering in 3 Feature with L2 Normal Laplacian Group Energies')
+    ax.set_title('KMeans Clustering in 3 Feature with Laplacian Group Energies')
     ax.set_xlabel('Prox Count') # feature 1 - aka ndarray col 0
     ax.set_ylabel('Talking Duration') # feature 2 - aka ndarray col 1
     ax.set_zlabel('Shared Atten Count') # feature 3 - aka ndarray col 2
