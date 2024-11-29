@@ -49,6 +49,7 @@ class RoleGraph(object):
 			WIP = work in progress
 			visualize the grouroles
 		"""
+		individuals = ['A', 'B', 'C', 'D']
 		if self.labels is None or self.centroids is None:
 			raise ValueError("Model has not been fitted. Call the 'fit' method first.")
 
@@ -124,7 +125,7 @@ class ScatterMetricVsAccuracy:
 		self.time, self.accuracy = zip(*data_accuracy) #unpack time and accuracy
 		self.model = None
 
-	def regression_plot(self):
+	def regression_plot(self, type: int):
 		"""
 		Create a scatter plot with a regression plot
 		"""
@@ -135,7 +136,17 @@ class ScatterMetricVsAccuracy:
 		for i in range(num_columns):
 			# Extract column data
 			x = self.data[:, i]
-			y = self.accuracy
+			if type == 1:
+				y = self.accuracy
+				ylabel = "Accuracy (%)"
+				yTextScaling = 2
+			else:
+				y = self.time
+				ylabel = "Time (sec)"
+				yTextScaling = 40
+			
+			# Data labels
+			data_labels = ['Conversation', 'Proximity', 'Attention']
 
 			# Scatter plot for this column
 			plt.scatter(x, y, color=colors[i % len(colors)], label=f"Column {i + 1} Data")
@@ -147,18 +158,18 @@ class ScatterMetricVsAccuracy:
 			predicted = model.predict(x_reshaped)
 
 			# Plot regression line
-			plt.plot(x, predicted, color=colors[i % len(colors)], linestyle='--', label=f"Column {i + 1} Regression\n$R^2 = {r2_score(y, predicted):.2f}$")
+			plt.plot(x, predicted, color=colors[i % len(colors)], linestyle='--', label=f"{data_labels[i]} Regression\n$R^2 = {r2_score(y, predicted):.2f}$")
 
 			# Add regression equation
 			intercept = model.intercept_
 			slope = model.coef_[0]
 			equation_text = f"$y = {slope:.2f}x + {intercept:.2f}$"
-			plt.text(5, np.max(y) - i * 2, equation_text, fontsize=10, color=colors[i % len(colors)])
+			plt.text(5, np.max(y) - i * yTextScaling, equation_text, fontsize=10, color=colors[i % len(colors)])
 
 		# Labels, legend, and grid
-		plt.xlabel("X Values (Columns of Data)")
-		plt.ylabel("Accuracy")
-		plt.title("Scatter Plot of Columns with Regression Lines")
+		plt.xlabel("Eigen Energy of Group parameters")
+		plt.ylabel(ylabel)
+		plt.title(f"Eigen Energy vs {ylabel}")
 		plt.legend()
 		#plt.legend(loc="center left", bbox_to_anchor=(0, 0.2))
 		plt.grid(True)
@@ -217,11 +228,12 @@ def main_graph_tool():
 		group_energy_data[i][2]=atten_data.get_group_energy_laplacian(i+1)
 
 	print(group_energy_data)
-	#visializer = RoleGraph(all_data,3)
-	#visializer.plot_roles()
+	visializer = RoleGraph(all_data,3)
+	visializer.plot_roles()
 
 	plotter = ScatterMetricVsAccuracy(group_energy_data, compelition)
-	plotter.regression_plot()
+	plotter.regression_plot(1)
+	plotter.regression_plot(0)
 
 if __name__ == "__main__":
 	main_graph_tool()
