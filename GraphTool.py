@@ -21,7 +21,7 @@ import numpy				as np
 import matplotlib.pyplot	as plt
 
 
-
+#grid plot for roles within groups
 class RoleGraph(object):
 	def __init__(self,all_data,n_clusters,num_groups=11):
 		self.all_data		=  all_data
@@ -66,15 +66,15 @@ class RoleGraph(object):
 				# Adjust row for visualization (matplotlib uses bottom-left as origin)
 				adjusted_row = row - 1
 				ax.add_patch(plt.Rectangle((col - 0.5, adjusted_row - 0.5), 1, 1, color=color, edgecolor="black"))
-				ax.text(col, adjusted_row, role, ha="center", va="center", fontsize=10, color="white")
+				ax.text(col, adjusted_row, role + 1, ha="center", va="center", fontsize=10, color="white")
 
 		# Set grid limits
 		max_row = max(pos[0] for positions in self.grid_mapping.values() for pos in positions)
 		max_col = max(pos[1] for positions in self.grid_mapping.values() for pos in positions)
 		ax.set_xlim(0.5, max_col + 0.5)
 		ax.set_ylim(-0.5, max_row - 0.5)
-		ax.set_xticks(range(1, max_col + 1))
-		ax.set_yticks(range(max_row))
+		ax.set_xticks(ticks=range(1, max_col + 1), labels=individuals)
+		ax.set_yticks(ticks=range(max_row), labels=range(1, max_row+1))
 		ax.invert_yaxis()  # Invert y-axis to make row 1 appear at the top
 		plt.grid(False)
 		plt.title("Roles among groups")
@@ -113,7 +113,7 @@ class RoleGraph(object):
 			
 		return grid_mapping
 
-
+#scatter Plot for Accuracy and Time
 class ScatterMetricVsAccuracy:
 	def __init__(self, data, data_accuracy):
 		"""
@@ -143,13 +143,13 @@ class ScatterMetricVsAccuracy:
 			else:
 				y = self.time
 				ylabel = "Time (sec)"
-				yTextScaling = 40
+				yTextScaling =40
 			
 			# Data labels
 			data_labels = ['Conversation', 'Proximity', 'Attention']
 
 			# Scatter plot for this column
-			plt.scatter(x, y, color=colors[i % len(colors)], label=f"Column {i + 1} Data")
+			plt.scatter(x, y, color=colors[i % len(colors)], label=f"{data_labels[i]} Data")
 
 			# Fit a regression line
 			model = LinearRegression()
@@ -164,12 +164,12 @@ class ScatterMetricVsAccuracy:
 			intercept = model.intercept_
 			slope = model.coef_[0]
 			equation_text = f"$y = {slope:.2f}x + {intercept:.2f}$"
-			plt.text(5, np.max(y) - i * yTextScaling, equation_text, fontsize=10, color=colors[i % len(colors)])
+			plt.text(1, np.max(y) - i * yTextScaling, equation_text, fontsize=10, color=colors[i % len(colors)])
 
 		# Labels, legend, and grid
-		plt.xlabel("Eigen Energy of Group parameters")
+		plt.xlabel("Laplacian Energy of Group parameters")
 		plt.ylabel(ylabel)
-		plt.title(f"Eigen Energy vs {ylabel}")
+		plt.title(f"Laplacian Energy vs {ylabel}")
 		plt.legend()
 		#plt.legend(loc="center left", bbox_to_anchor=(0, 0.2))
 		plt.grid(True)
@@ -189,9 +189,9 @@ def main_graph_tool():
 
 	#initialize data
 	compelition	= clean_compeletion_csv(load_csv("completion_time_and_accuracy.csv"))
-	convo_data	= DataSet("conversation_graphs.json")
-	prox_data	= DataSet("proximity_graphs.json")
-	atten_data	= DataSet("shared_attention_graphs.json")
+	convo_data	= DataSet("conversation_graphs.json", my_directed=False)
+	prox_data	= DataSet("proximity_graphs.json", my_directed=True)
+	atten_data	= DataSet("shared_attention_graphs.json", my_directed=False)
 
 	#convert to eigen values
 	convo_data_eigen	= kmeans_eigenvalues(convo_data.list_adj_matrix).eigenvalues
@@ -221,11 +221,25 @@ def main_graph_tool():
 	
 
 	# row is person, col is data sets
-	group_energy_data=np.zeros((num_groups, 3))
+	"""group_energy_data=np.zeros((num_groups, 3))
 	for i in range(num_groups):
 		group_energy_data[i][0]=prox_data.get_group_energy_laplacian(i+1)
 		group_energy_data[i][1]=convo_data.get_group_energy_laplacian(i+1)
-		group_energy_data[i][2]=atten_data.get_group_energy_laplacian(i+1)
+		group_energy_data[i][2]=atten_data.get_group_energy_laplacian(i+1)"""
+	
+	# row is person, col is data sets
+	"""group_energy_data=np.zeros((num_groups, 3))
+	for i in range(num_groups):
+		group_energy_data[i][0]=prox_data.get_group_energy(i+1)
+		group_energy_data[i][1]=convo_data.get_group_energy(i+1)
+		group_energy_data[i][2]=atten_data.get_group_energy(i+1)"""
+	
+	# row is person, col is data sets
+	group_energy_data=np.zeros((num_groups, 3))
+	for i in range(num_groups):
+		group_energy_data[i][0]=prox_data.get_group_laplacian_energy(i+1)
+		group_energy_data[i][1]=convo_data.get_group_laplacian_energy(i+1)
+		group_energy_data[i][2]=atten_data.get_group_laplacian_energy(i+1)
 
 	print(group_energy_data)
 	visializer = RoleGraph(all_data,3)
