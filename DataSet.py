@@ -15,7 +15,7 @@ def softmax(x):
 
 class DataSet:
     "created a data set from a json"
-    def __init__(self, file_name:str, directory:str="Data/", directed:bool=False):
+    def __init__(self, file_name:str, directory:str="Data/", my_directed:bool=False):
         """
         Contructs from a string of the name of a json file. Can add a directory but the default is Data/
         
@@ -31,7 +31,8 @@ class DataSet:
         """a list of numpy arrays that are adjacency lists"""
         self.load()
         self._json_to_adj_list()
-        self.directed=directed
+        self.directed=my_directed
+
 
     def _extract_group_number(self, graph: str)->int:
         """Accepts a graph from JSON and determines by the group name as a number extracted from the "id" field - Credit: Diana
@@ -184,7 +185,6 @@ class DataSet:
         #get the group eigen values with the input as a np array
         eigen_vector = self.get_group_eigenvalue(group_num)
         
-
         #sum of absolute values of eigen values
         for eigen in eigen_vector:
             energy += abs(eigen)
@@ -298,18 +298,37 @@ class DataSet:
         #if you made it here you messed up
         return None
     
+    def l1_normalize(x):
+        return x / np.linalg.norm(x, ord=1)
+
     def get_sum_all_nodes_normalize(self, num:int):
         """
         Returns a 1-dimensional vector of sums of normalized edges for all nodes.
         """
         all_nodes = []
-        
+
         # Iterate over each node's adjacency list
-        for adj_matrix in self.list_adj_matrix:  # Check if 11 is the correct number of iterations
-            norm_adj = self._normalize_matrix(adj_matrix, num)  # Normalize adjacency matrix
-            for row in norm_adj:
-                #sum all the rows
-                all_nodes.append(row.sum())# Append the sum for the current node
+        if self.directed:
+            for adj_matrix in self.list_adj_matrix:  # Check if 11 is the correct number of iterations
+                vector=np.zeros(4)
+                for i, row in enumerate(adj_matrix):
+                    #sum all the rows
+                    vector[i]=row.sum()/(len(adj_matrix)-1)
+
+                # print(vector)
+                # all_nodes.append(self.l1_normalize(vector))# Append the sum for the current node
+                norm_vector=vector / np.linalg.norm(vector, ord=num)
+                for i in np.nditer(norm_vector):
+                    all_nodes.append(i)
+        else:
+            # print(f'sum all nodes normalized... {self._name} = {self.directed}')
+            for adj_matrix in self.list_adj_matrix:  # Check if 11 is the correct number of iterations
+                norm_adj = self._normalize_matrix(adj_matrix, num)  # Normalize adjacency matrix
+                for row in norm_adj:
+                    #sum all the rows
+                    all_nodes.append(row.sum())# Append the sum for the current node
+    
+    
         
         # Return all nodes as a 1D list (flattened vector)
         return all_nodes

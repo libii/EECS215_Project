@@ -60,29 +60,23 @@ def clean_compeletion_csv(data:list)->tuple:
 
 def get_names(num_groups)->list:
     """Made this so I can add names to the dots in the matplotlib charts.
-    :returns: array of strings with names of each person [g#, letter], where g# is the group number and letter is the person in the group (person a, person b, person c, person d)"""
-    
-    total_participants=num_groups
+    :returns: array of strings with names of each person [g#, letter], where g# is the group number and letter is the person in the group (person a, person b, person c, person d)"""   
     names=[]
-    p=None
     for i in range(num_groups*4):
-        if i % 4 == 0:
-            p=4
-        else:
-            p=i%4
-        names.append(f'{(i//4)+1}{chr(96+p)}')
+        names.append(f'{(i//4)+1}{chr(97+(i%4))}')
     return names
 
 def main():
     num_groups=11
     total_participants=num_groups*4
+    the_norm=1
     directory="/Graphs/All_Participant/Summed_Nodes/"
-    graph_name="new_normalized_summed_nodes_of_for_2features"
+    graph_name="new_l"+str(the_norm)+"_normalized_summed_nodes_of_for_2features"
     
     #load json data - must give a file name, can also take another folder relative to the location of the current file that calls it in the directory
-    prox_data=DataSet("proximity_graphs.json")
-    convo_data=DataSet("conversation_graphs.json")
-    atten_data=DataSet("shared_attention_graphs.json")
+    prox_data=DataSet("proximity_graphs.json", my_directed=False)
+    convo_data=DataSet("conversation_graphs.json", my_directed=True)
+    atten_data=DataSet("shared_attention_graphs.json", my_directed=False)
 
     fig = plt.figure(figsize=(15, 5))
     data_sets=2
@@ -102,8 +96,8 @@ def main():
     #Doing 2 Feature Kmeans for 3 combos of graphs
     for index, axis in enumerate(axises):
         for i in range(total_participants):
-            data_features[i][0]=features[axis[0]].get_sum_all_nodes_normalize(1)[i]
-            data_features[i][1]=features[axis[1]].get_sum_all_nodes_normalize(1)[i]
+            data_features[i][0]=features[axis[0]].get_sum_all_nodes_normalize(the_norm)[i]
+            data_features[i][1]=features[axis[1]].get_sum_all_nodes_normalize(the_norm)[i]
 
         ###### Make K Means Model and Extract Features ##########
         data=data_features
@@ -116,13 +110,6 @@ def main():
         # optimal_clusters = finder.get_optimal_clusters()
         # print(f"")
         # finder.plot_combined_metrics()
-
-        # if axis==(0,1): #prox/convo
-        #     num_clusters=3
-        # elif axis==(0,2): #prox/attention
-        #     num_clusters=3
-        # elif axis==(1,2): #convo/atten
-        #     num_clusters=3
 
         # Create KMeans model and fit the data
         kmeans = KMeans(n_clusters=num_clusters, random_state=21) # seed at 21 because of forever 21
@@ -137,21 +124,11 @@ def main():
 
         # Print silhouette scores
         # for i, score in enumerate(silhouette_scores):
-        #     if i % 4 == 0:
-        #         p=4
-        #     else:
-        #         p=i%4
-        #     print(f"Point {(i//4)+1}{chr(96+p)}: Silhouette Score = {score}")
-
+        #     print(f"Point {((i//4)+1)}{chr(97+(i%4))}: Silhouette Score = {score}")
+        
         roles=[[] for _ in range(num_clusters)]
-        p=None
-
         for i, (label, score) in enumerate(zip(labels, silhouette_scores)):
-            if i % 4 == 0:
-                p=4
-            else:
-                p=i%4
-            roles[label].append(f'{(i//4)+1}{chr(96+p)}{score:.2f}')
+            roles[label].append(f'{(i//4)+1}{chr(97+(i%4))}{score:.2f}')
 
         ## prints roles define by k cluster
         print_name=graph_name + ":\n"+ axis_name[axis[0]] +" & "+axis_name[axis[1]]
@@ -185,8 +162,7 @@ def main():
         ax1.set_xlabel(f'{axis_name[axis[0]]}')
         ax1.set_ylabel(f'{axis_name[axis[1]]}')
         ax1.legend()
-
-
+    fig.suptitle(f'Normalized with L{the_norm} - 2 Feature Kmeans Cluster')
     path=os.getcwd() 
     path += directory
     path += graph_name +".png"

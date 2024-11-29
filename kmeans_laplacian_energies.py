@@ -138,12 +138,12 @@ def get_names(num_groups)->list:
 def main():
     num_groups=11
     directory="/Graphs/Groups/"
-    graph_name="kmeans_laplacian_energies_for_3features"
+    graph_name="new_kmeans_laplacian_energies_for_3features"
 
     #load json data - must give a file name, can also take another folder relative to the location of the current file that calls it in the directory
-    prox_data=DataSet("proximity_graphs.json", directed=False)
-    convo_data=DataSet("conversation_graphs.json", directed=True)
-    atten_data=DataSet("shared_attention_graphs.json", directed=False)
+    prox_data=DataSet("proximity_graphs.json", my_directed=False)
+    convo_data=DataSet("conversation_graphs.json", my_directed=True)
+    atten_data=DataSet("shared_attention_graphs.json", my_directed=False)
 
     data_sets=3
     # row is person, col is data sets
@@ -156,11 +156,11 @@ def main():
         group_data[i][2]=atten_data.get_group_laplacian_energy(i+1)
 
     # determine # of clusters
-    # finder = OptimalClusterFinder(data=group_data, max_clusters=10, graph_name=graph_name,directory=directory)
-    # finder.find_optimal_clusters()
-    # optimal_clusters = finder.get_optimal_clusters()
-    # print(f"")
-    # finder.plot_combined_metrics()
+    finder = OptimalClusterFinder(data=group_data, max_clusters=10, graph_name=graph_name,directory=directory)
+    finder.find_optimal_clusters()
+    optimal_clusters = finder.get_optimal_clusters()
+    print(f"")
+    finder.plot_combined_metrics()
     
     # Tell computer to divide in these number of clusters 
     num_clusters = 3 # used elbow method(data). for our data it was good at 3 n_clusters ... maybe 4 is better? Check the graph. I feel like it's a small change 3, 4.
@@ -182,12 +182,12 @@ def main():
     silhouette_scores = silhouette_samples(data, labels)
 
     # Print silhouette scores
-    # for i, score in enumerate(silhouette_scores):
-    #     if i % 4 == 0:
-    #         p=4
-    #     else:
-    #         p=i%4
-    #     # print(f"Group {i+1}: Silhouette Score = {score:.3f}")
+    for i, score in enumerate(silhouette_scores):
+        if i % 4 == 0:
+            p=4
+        else:
+            p=i%4
+        print(f"Group {i+1}: Silhouette Score = {score:.3f}")
 
     roles=[[] for _ in range(num_clusters)] # 3 if 3 labels, 4 if 4 labels. undecided
     p=None

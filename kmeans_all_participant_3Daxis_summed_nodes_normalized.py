@@ -134,41 +134,41 @@ def get_names(num_groups)->list:
     names=[]
     p=None
     for i in range(num_groups*4):
-        if i % 4 == 0:
-            p=4
-        else:
-            p=i%4
-        names.append(f'{(i//4)+1}{chr(96+p)}')
+
+        names.append(f'{(i//4)+1}{chr(97+(i%4))}')
     return names
 
 def main():
+    the_norm=2 # pick 1 or 2 normalization for l1 or l2 normalization
     num_groups=11
     total_participants=num_groups*4
     directory="/Graphs/All_Participant/Summed_Nodes/"
-    graph_name="new_normalized_summed_nodes_of_for_3features"
+    graph_name="new_l"+str(the_norm)+"_normalized_summed_nodes_of_for_3features"
     
     #load json data - must give a file name, can also take another folder relative to the location of the current file that calls it in the directory
-    convo_data=DataSet("conversation_graphs.json")
-    prox_data=DataSet("proximity_graphs.json")
-    atten_data=DataSet("shared_attention_graphs.json")
+    convo_data=DataSet("conversation_graphs.json", my_directed=True)
+    prox_data=DataSet("proximity_graphs.json", my_directed=False)
+    atten_data=DataSet("shared_attention_graphs.json", my_directed=False)
 
     #numpy array where data set is column and nodes are rows
-    data_sets=4 # different data sets, aka can be thought of as  features
+    data_sets=3 # different data sets, aka can be thought of as  features
     all_data=np.zeros((total_participants,data_sets))
 
 
     for i in range(total_participants):
         # these are counts or duration / seconds.##..
-        all_data[i][0]=prox_data.get_sum_all_nodes_normalize(2)[i]
-        all_data[i][1]=convo_data.get_sum_all_nodes_normalize(2)[i]
-        all_data[i][2]=atten_data.get_sum_all_nodes_normalize(2)[i]
+        all_data[i][0]=prox_data.get_sum_all_nodes_normalize(the_norm)[i]
+        all_data[i][1]=convo_data.get_sum_all_nodes_normalize(the_norm)[i]
+        all_data[i][2]=atten_data.get_sum_all_nodes_normalize(the_norm)[i]
+
+    print(all_data)
 
   # determine # of clusters
-    # finder = OptimalClusterFinder(data=all_data, max_clusters=10, graph_name=graph_name,directory=directory)
-    # finder.find_optimal_clusters()
-    # optimal_clusters = finder.get_optimal_clusters()
-    # print(f"")
-    # finder.plot_combined_metrics()
+    finder = OptimalClusterFinder(data=all_data, max_clusters=10, graph_name=graph_name,directory=directory)
+    finder.find_optimal_clusters()
+    optimal_clusters = finder.get_optimal_clusters()
+    print(f"")
+    finder.plot_combined_metrics()
 
     ###### Make K Means Model and Extract Features ##########
     # Tell computer to divide in these number of clusters 
@@ -188,22 +188,22 @@ def main():
     silhouette_scores = silhouette_samples(data, labels)
 
     for i, score in enumerate(silhouette_scores):
-        if i % 4 == 0:
-            p=4
-        else:
-            p=i%4
-        print(f"Point {(i//4)+1}{chr(96+p)}: Silhouette Score = {score}")
+        # if i % 4 == 0:
+        #     p=4
+        # else:
+        #     p=i%4
+        print(f"Point {((i//4)+1)}{chr(97+(i%4))}: Silhouette Score = {score}")
 
 
     roles=[[] for _ in range(num_clusters)] # 3 if 3 labels, 4 if 4 labels. undecided
     p=None
 
     for i, (label, score) in enumerate(zip(labels, silhouette_scores)):
-        if i % 4 == 0:
-            p=4
-        else:
-            p=i%4
-        roles[label].append(f'{(i//4)+1}{chr(96+p)}{score:.2f}')
+        # if i % 4 == 0:
+        #     p=4
+        # else:
+        #     p=i%4
+        roles[label].append(f'{((i//4)+1)%4}{chr(97+(i%4))}{score:.2f}')
 
     ### prints roles define by k cluster
     print('\n'+graph_name)
@@ -233,7 +233,7 @@ def main():
     # Plot centroids - center dots for clusters
     ax.scatter(centroids[:, 0], centroids[:, 1], centroids[:, 2], s=350, c='red', marker='X', label='Centroids')
 
-    ax.set_title('KMeans Clustering in 3D (w/ L2 Normalization)')
+    ax.set_title(f'KMeans Clustering in 3D (w/ L{the_norm} Normalization)')
     ax.set_xlabel('Prox Count') # feature 1 - aka ndarray col 0
     ax.set_ylabel('Talking Duration') # feature 2 - aka ndarray col 1
     ax.set_zlabel('Shared Atten Count') # feature 3 - aka ndarray col 2
