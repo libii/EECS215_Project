@@ -4,7 +4,7 @@ from OptimalClusterFinder import OptimalClusterFinder
 
 import numpy  as np
 import matplotlib.pyplot as plt
-
+from pprint import pprint 
 class kmeans_eigenvalues(object):
 	def __init__(self, list_adj_matrix:list):
 		"""
@@ -44,6 +44,8 @@ if __name__ == "__main__":
 	prox_data_eigen		= kmeans_eigenvalues(prox_data.list_adj_matrix).eigenvalues
 	atten_data_eigen	= kmeans_eigenvalues(atten_data.list_adj_matrix).eigenvalues
 
+	pprint(convo_data_eigen)
+
 	#get number of participants
 	num_participants = len(convo_data_eigen)
 
@@ -53,6 +55,8 @@ if __name__ == "__main__":
 		all_eigen_data[i][0] = convo_data_eigen[i]
 		all_eigen_data[i][1] = prox_data_eigen[i]
 		all_eigen_data[i][2] = atten_data_eigen[i]
+
+
 	
 	finder = OptimalClusterFinder(data=all_eigen_data, max_clusters=10)
 	finder.find_optimal_clusters()

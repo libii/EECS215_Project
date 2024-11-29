@@ -130,18 +130,18 @@ def get_names(num_groups)->list:
     names=[]
     p=None
     for i in range(num_groups*4):
-        if i % 4 == 0:
-            p=4
-        else:
-            p=i%4
-        names.append(f'{(i//4)+1}{chr(96+p)}')
+        # if i % 4 == 0:
+        #     p=4
+        # else:
+        #     p=i%4
+        names.append(f'{(i//4)+1}{chr(97+(i%4))}')
     return names
 
 def main():
     num_groups=11
     total_participants=num_groups*4
     directory="/Graphs/All_Participant/Summed_Nodes/"
-    graph_name="unnormalized_summed_nodes_of_for_3features"
+    graph_name="new_unnormalized_summed_nodes_of_for_3features"
     
     #loads csv data
     compelition=clean_compeletion_csv(load_csv("completion_time_and_accuracy.csv"))
@@ -157,7 +157,7 @@ def main():
     for i in range(total_participants):
         # these are counts or duration / seconds.##..
         all_data[i][0]=prox_data.get_sum_all_nodes()[i]
-        all_data[i][1]=convo_data.get_sum_all_nodes()[i]
+        all_data[i][1]=convo_data.get_sum_all_nodes()[i]/3
         all_data[i][2]=atten_data.get_sum_all_nodes()[i]
 
    # determine # of clusters
@@ -184,21 +184,13 @@ def main():
     silhouette_scores = silhouette_samples(data, labels)
 
     for i, score in enumerate(silhouette_scores):
-        if i % 4 == 0:
-            p=4
-        else:
-            p=i%4
-        print(f"Point {(i//4)+1}{chr(96+p)}: Silhouette Score = {score}")
+        print(f"Point {((i//4)+1)}{chr(97+(i%4))}: Silhouette Score = {score}")
 
     roles=[[] for _ in range(num_clusters)] # 3 if 3 labels, 4 if 4 labels. undecided
     p=None
     
     for i, (label, score) in enumerate(zip(labels, silhouette_scores)):
-        if i % 4 == 0:
-            p=4
-        else:
-            p=i%4
-        roles[label].append(f'{(i//4)+1}{chr(96+p)}{score:.2f}')
+        roles[label].append(f'{(i//4)+1}{chr(97+(i%4))}{score:.2f}')
 
 
     ### prints roles define by k cluster
