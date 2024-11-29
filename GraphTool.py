@@ -139,9 +139,11 @@ class ScatterMetricVsAccuracy:
 			if type == 1:
 				y = self.accuracy
 				ylabel = "Accuracy (%)"
+				yTextScaling = 2
 			else:
 				y = self.time
 				ylabel = "Time (sec)"
+				yTextScaling = 40
 			
 			# Data labels
 			data_labels = ['Conversation', 'Proximity', 'Attention']
@@ -162,7 +164,7 @@ class ScatterMetricVsAccuracy:
 			intercept = model.intercept_
 			slope = model.coef_[0]
 			equation_text = f"$y = {slope:.2f}x + {intercept:.2f}$"
-			plt.text(5, np.max(y) - i * 2, equation_text, fontsize=10, color=colors[i % len(colors)])
+			plt.text(5, np.max(y) - i * yTextScaling, equation_text, fontsize=10, color=colors[i % len(colors)])
 
 		# Labels, legend, and grid
 		plt.xlabel("Eigen Energy of Group parameters")
